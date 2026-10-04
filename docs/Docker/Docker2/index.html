@@ -20,13 +20,13 @@ https://github.com/alex-shpak/hugo-book
 	<meta property="og:type" content="article">
 		<meta property="article:section" content="docs">
 		<meta property="article:published_time" content="2026-10-03T00:00:00+08:00">
-		<meta property="article:modified_time" content="2026-10-04T11:53:56+08:00">
+		<meta property="article:modified_time" content="2026-10-04T12:32:20+08:00">
 
 
 	<meta itemprop="name" content="Docker 镜像">
 	<meta itemprop="description" content="镜像基础 镜像是一种轻量级、可执行的独立软件包/一个精简的操作系统 镜像中包含应用软件及应用软件的运行环境。具体来说镜像包含运行某个软件所需的所有内容，包括代码、库、环境变量和配置文件等 镜像的运行时是容器 镜像中不包含内核，其共享宿主机的内核 镜像中心与仓库 镜像中心默认使用的都是 Docker 官方的 Docker Hub；也可指定第三方镜像中心&lt; domain-name（域名或 IP）&gt;/&lt; repository&gt;">
 	<meta itemprop="datePublished" content="2026-10-03T00:00:00+08:00">
-	<meta itemprop="dateModified" content="2026-10-04T11:53:56+08:00">
+	<meta itemprop="dateModified" content="2026-10-04T12:32:20+08:00">
 	<meta itemprop="wordCount" content="1522">
 
 <title>Docker 镜像 • 54deer の BLOG</title>
@@ -36,7 +36,7 @@ https://github.com/alex-shpak/hugo-book
 <link rel="stylesheet" href="/book.min.a02ac497c6d6e5c0a81db7ed78d24326ef87e617cb865bebfbe4d1a1d6ee6573.css" integrity="sha256-oCrEl8bW5cCoHbfteNJDJu&#43;H5hfLhlvr&#43;&#43;TRodbuZXM=" crossorigin="anonymous">
 
 
-<script type="module" src="/zh.search.min.980ab7451d78ce6ed4283541d5eba1bbd18b2fbb112c94770452138e1e00fd43.js" integrity="sha256-mAq3RR14zm7UKDVB1euhu9GLL7sRLJR3BFITjh4A/UM=" crossorigin="anonymous"></script>
+<script type="module" src="/zh.search.min.80833218d04bf0eb7468d03b70072236666cec5c96d155b49e297d95ac7a428e.js" integrity="sha256-gIMyGNBL8Ot0aNA7cAciNmZs7FyW0VW0nil9lax6Qo4=" crossorigin="anonymous"></script>
   
 </head>
 <body dir="ltr" class="book-kind-page book-type-docs">
@@ -295,7 +295,7 @@ https://github.com/alex-shpak/hugo-book
     <input type="checkbox" id="section-4a86b6f03b2baaea23efad445fdd13a5" class="toggle" checked />
     <label for="section-4a86b6f03b2baaea23efad445fdd13a5" class="flex">
       <a role="button" class="">
-        docker</a>
+        Docker</a>
       <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
     </label>
   
@@ -310,7 +310,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/docs/Docker/Docker-1/" class="">
+    <a href="/docs/Docker/Docker1/" class="">
       Docker 概述</a>
   
 
@@ -582,9 +582,9 @@ Docker 官方镜像仓库；官方镜像仓库的名称&lt; repository &gt;一�
 </div>
 </div><h1 id="镜像分层">镜像分层<a class="anchor" href="#%e9%95%9c%e5%83%8f%e5%88%86%e5%b1%82"></a></h1>
 <p>Docker 镜像由一些松耦合的<strong>只读镜像层</strong>组成，Docker Daemon 负责堆叠这些镜像层，并将它们关联为一个统一的整体，即对外表现出的是一个独立的对象。</p>
-<p>通过 docker pull 命令拉取指定的镜像时，每个 Pull complete 结尾的行就代表下载完毕了一个镜像层
-<img src="20261004000831.png" alt="" />
-<img src="20261004000843.png" alt="" /></p>
+<p>通过 docker pull 命令拉取指定的镜像时，每个 Pull complete 结尾的行就代表下载完毕了一个镜像层<br>
+<img src="../20261004000831.png" alt="" /><br>
+<img src="../20261004000843.png" alt="" /></p>
 <ul>
 <li>每个分层都是只读的，所有对分层的修改都是以新分层的形式出现，并不会破坏原分层内容</li>
 <li>在不同镜像间实现<strong>资源共享</strong>，即不同镜像对相同下层镜像的复用</li>
@@ -596,17 +596,17 @@ Docker 官方镜像仓库；官方镜像仓库的名称&lt; repository &gt;一�
 <li>镜像文件系统就是对镜像占有的磁盘空间进行管理的文件系统，拥有该镜像所有镜像层的数据内容。</li>
 <li>而镜像 json 文件则是用于描述镜像的相关属性的集合</li>
 </ul>
-<p>一个 docker 镜像的文件系统 FS 由多层只读的镜像层组成，根据其位置与功能的不同可分为两类：基础镜像层（基础镜像层的文件统称为根文件系统 rootfs）与扩展镜像层（对基础镜像层功能的扩展。在 Dockerfile 中每条用于某项特定功能的指令都会生成一个扩展镜像层）
-<img src="20261004001635.png" alt="" /></p>
+<p>一个 docker 镜像的文件系统 FS 由多层只读的镜像层组成，根据其位置与功能的不同可分为两类：基础镜像层（基础镜像层的文件统称为根文件系统 rootfs）与扩展镜像层（对基础镜像层功能的扩展。在 Dockerfile 中每条用于某项特定功能的指令都会生成一个扩展镜像层）<br>
+<img src="../20261004001635.png" alt="" /></p>
 <p>镜像运行了起来就形成了容器，<strong>容器的文件系统是在镜像最外层之上增加了一个可读写的容器层</strong></p>
 <p>对文件的任何更改都只存在于容器层。因此任何对容器的操作都不会影响到镜像本身；要修改某文件，容器层会首先把在镜像层找到的文件 copy 到容器层，然后再进行修改。删除文件也只会将存在于容器层中的文件副本删除</p>
-<p>最终合并分层中覆盖不同分层间重复的文件
-<img src="20261004002038.png" alt="" /></p>
+<p>最终合并分层中覆盖不同分层间重复的文件<br>
+<img src="../20261004002038.png" alt="" /></p>
 <h1 id="多架构镜像">多架构镜像<a class="anchor" href="#%e5%a4%9a%e6%9e%b6%e6%9e%84%e9%95%9c%e5%83%8f"></a></h1>
 <p>由于不同的 OS 采用的不同的类库，不同的 ARCH 采用的不同的指令系统，所以针对不同的 OS/ARCH 所设计的镜像也就是不同的。</p>
 <p>通过 docker pull 命令拉取到的一定是针对拉取用户操作系统/系统架构的镜像，无需用户自己考虑操作系统/系统架构问题</p>
-<p>镜像的多架构信息保存在 Manifest 文件中
-<img src="20261004003040.png" alt="" /></p>
+<p>镜像的多架构信息保存在 Manifest 文件中<br>
+<img src="../20261004003040.png" alt="" /></p>
 </article>
  
       
@@ -633,7 +633,7 @@ Docker 官方镜像仓库；官方镜像仓库的名称&lt; repository &gt;一�
 <div class="flex flex-wrap justify-between">
     <span>
     
-      <a href="/docs/Docker/Docker-1/" class="flex align-center">
+      <a href="/docs/Docker/Docker1/" class="flex align-center">
         <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
         <span>Docker 概述</span>
       </a>
