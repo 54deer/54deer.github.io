@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr" data-theme="auto">
+<head>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Dockerfile 简介 Dockerfile 是用于构建 Docker 镜像的脚本文件，由一系列指令构成
+通过docker build命令构建镜像时，Dockerfile 中的指令会由上到下依次执行，每条指令都将会构建出一个镜像层
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://54deer.github.io/docs/Docker/docker4/">
+	<meta property="og:site_name" content="54deer の BLOG">
+	<meta property="og:title" content="Dockerfile">
+	<meta property="og:description" content="Dockerfile 简介 Dockerfile 是用于构建 Docker 镜像的脚本文件，由一系列指令构成
+通过docker build命令构建镜像时，Dockerfile 中的指令会由上到下依次执行，每条指令都将会构建出一个镜像层">
+	<meta property="og:locale" content="zh">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="docs">
+		<meta property="article:published_time" content="2026-10-04T00:00:00+08:00">
+		<meta property="article:modified_time" content="2026-10-04T20:20:15+08:00">
+
+
+	<meta itemprop="name" content="Dockerfile">
+	<meta itemprop="description" content="Dockerfile 简介 Dockerfile 是用于构建 Docker 镜像的脚本文件，由一系列指令构成
+通过docker build命令构建镜像时，Dockerfile 中的指令会由上到下依次执行，每条指令都将会构建出一个镜像层">
+	<meta itemprop="datePublished" content="2026-10-04T00:00:00+08:00">
+	<meta itemprop="dateModified" content="2026-10-04T20:20:15+08:00">
+	<meta itemprop="wordCount" content="2579">
+
+<title>Dockerfile • 54deer の BLOG</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="https://54deer.github.io/docs/Docker/docker4/">
+<link rel="stylesheet" href="/book.min.a02ac497c6d6e5c0a81db7ed78d24326ef87e617cb865bebfbe4d1a1d6ee6573.css" integrity="sha256-oCrEl8bW5cCoHbfteNJDJu&#43;H5hfLhlvr&#43;&#43;TRodbuZXM=" crossorigin="anonymous">
+
+
+<script type="module" src="/zh.search.min.76576e8dc21126e8d1ef883fda6828dc4b917be5a191ed0e9e02c2002da33e40.js" integrity="sha256-dldujcIRJujR74g/2mgo3EuRe&#43;Whke0OngLCAC2jPkA=" crossorigin="anonymous"></script>
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>54deer の BLOG</span>
+  </a>
+</h2>
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text"
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+<ul><li><a href="/">🏠 About Me</a></li><li><a href="https://github.com/54deer" target="_blank" rel="noopener">🔗 GitHub</a></li></ul>
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-9e24d28b120804ba6357f6fbea8c5d7d" class="toggle"  />
+    <label for="section-9e24d28b120804ba6357f6fbea8c5d7d" class="flex">
+      <a role="button" class="">
+        Golang</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-81b3b35a677bb5efb846d979849ae55f" class="toggle"  />
+    <label for="section-81b3b35a677bb5efb846d979849ae55f" class="flex">
+      <a role="button" class="">
+        GO 标准库</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-7932a59f0acc34d9eb509b606d8c3e7f" class="toggle"  />
+    <label for="section-7932a59f0acc34d9eb509b606d8c3e7f" class="flex">
+      <a role="button" class="">
+        GO 三方库</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-af6c0eda4d2cdd556cc66540bdce0b76" class="toggle"  />
+    <label for="section-af6c0eda4d2cdd556cc66540bdce0b76" class="flex">
+      <a role="button" class="">
+        pgSQL&amp;MySQL</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-fa7c9692409e20f1f52ebe77c4c5e801" class="toggle"  />
+    <label for="section-fa7c9692409e20f1f52ebe77c4c5e801" class="flex">
+      <a role="button" class="">
+        SQL&amp;GORM</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-a7abf702dde8fdc025b82feea1d6ba03" class="toggle"  />
+    <label for="section-a7abf702dde8fdc025b82feea1d6ba03" class="flex">
+      <a role="button" class="">
+        Redis</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-2b000412833c87b0e53129bd1d6feab9" class="toggle"  />
+    <label for="section-2b000412833c87b0e53129bd1d6feab9" class="flex">
+      <a role="button" class="">
+        RabbitMQ</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="toggle"  />
+    <label for="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="flex">
+      <a role="button" class="">
+        mongoDB</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/mongoDB/1/" class="">
+      mongoDB 基础知识</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/mongoDB/2/" class="">
+      mongosh CURD操作</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-4a86b6f03b2baaea23efad445fdd13a5" class="toggle" checked />
+    <label for="section-4a86b6f03b2baaea23efad445fdd13a5" class="flex">
+      <a role="button" class="">
+        docker</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker1/" class="">
+      Docker 概述</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker2/" class="">
+      Docker 镜像</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker3/" class="">
+      Docker 容器</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker4/" class="active">
+      Dockerfile</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker5/" class="">
+      Docker 数据持久化</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ed5bdd985a7ce57aea7f541f44e05eca" class="toggle"  />
+    <label for="section-ed5bdd985a7ce57aea7f541f44e05eca" class="flex">
+      <a role="button" class="">
+        Git</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/git/Git/" class="">
+      Git</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <input type="checkbox" class="toggle" id="menu-control" />
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Dockerfile</h3>
+
+  
+  <input type="checkbox" class="toggle" id="toc-control" />
+  <label for="toc-control">
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+  </label>
+  
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#dockerfile-简介">Dockerfile 简介</a></li>
+    <li><a href="#指令">指令</a>
+      <ul>
+        <li><a href="#from">FROM</a></li>
+        <li><a href="#maintainer--label">MAINTAINER / LABEL</a></li>
+        <li><a href="#env--arg">ENV / ARG</a></li>
+        <li><a href="#workdir">WORKDIR</a></li>
+        <li><a href="#run--cmd--entrypoint">RUN / CMD / ENTRYPOINT</a></li>
+        <li><a href="#expose">EXPOSE</a></li>
+        <li><a href="#add--copy">ADD / COPY</a></li>
+        <li><a href="#onbuild">ONBUILD</a></li>
+        <li><a href="#volume">VOLUME</a></li>
+      </ul>
+    </li>
+    <li><a href="#docker-build-命令">docker build 命令</a></li>
+    <li><a href="#build-cache及镜像构造过程">build cache及镜像构造过程</a>
+      <ul>
+        <li><a href="#build-cache-失效">build cache 失效</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      <h1>Dockerfile</h1>
+
+
+<div class="page-meta" style="opacity: 0.65; font-size: 0.85em; margin: -0.5em 0 1.5em 0;">
+  作者 54deer
+   · 
+  日期 2026-10-04
+</div>
+
+      
+  <article class="markdown book-article"><h1 id="dockerfile-简介">Dockerfile 简介<a class="anchor" href="#dockerfile-%e7%ae%80%e4%bb%8b"></a></h1>
+<p>Dockerfile 是用于构建 Docker 镜像的<strong>脚本文件</strong>，由一系列指令构成</p>
+<p>通过<strong>docker build</strong>命令构建镜像时，Dockerfile 中的指令会由上到下依次执行，每条指令都将会构建出一个镜像层</p>
+<p>因此，指令越多，层次就越多，创建的镜像就越多，效率就越低</p>
+<p>对于 Dockerfile 的指令，需要注意以下几点：</p>
+<ul>
+<li><strong>指令是大小不敏感的，但惯例是写为全大写</strong></li>
+<li><strong>指令后携带参数</strong></li>
+<li><strong># 号开头的行为注释</strong></li>
+<li><strong>能在一个指令完成的动作就不要分为两条</strong></li>
+</ul>
+<h1 id="指令">指令<a class="anchor" href="#%e6%8c%87%e4%bb%a4"></a></h1>
+<h2 id="from">FROM<a class="anchor" href="#from"></a></h2>
+<p>复用基础镜像，唯一一定不会新添加镜像层的指令</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>FROM &lt; image &gt;[:&lt; tag &gt;]
+</span></span><span style="display:flex;"><span>// 用于指定基础镜像，且必须是第一条指令；若省略了 tag，则默认为 latest
+</span></span><span style="display:flex;"><span>// scratch 镜像是一个空镜像；只能在 Dockerfile 中被继承，不能通过 pull 命令拉取，不能 run，也没有 tag。并且它也不会生成镜像中的文件系统层</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="maintainer--label">MAINTAINER / LABEL<a class="anchor" href="#maintainer--label"></a></h2>
+<p>修改镜像 json 元数据文件<br>
+通过 docker inspect 可查看到 LABEL 与 MAINTAINER 的内容</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>MAINTAINER &lt;name&gt;
+</span></span><span style="display:flex;"><span>// 参数填写的一般是维护者姓名和信箱。不过，该指令官方已不建议使用，而是使用 LABEL 指令代替
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>LABEL &lt;key&gt;=&lt;value&gt; &lt;key&gt;=&lt;value&gt; ...
+</span></span><span style="display:flex;"><span>// 以键值对的方式包含任意镜像的元数据信息，用于替代MAINTAINER 指令。</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="env--arg">ENV / ARG<a class="anchor" href="#env--arg"></a></h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>ARG <span style="color:#ff79c6">&lt;</span> varname <span style="color:#ff79c6">&gt;</span>[<span style="color:#ff79c6">=&lt;</span>default value<span style="color:#ff79c6">&gt;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 用于定义一个变量，可以用于镜像构建运行时被其他指令如RUN使用。若要定义多个变量，则需要定义多个 ARG 指令
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 在docker build 时可指定<span style="color:#ff79c6">--</span>build<span style="color:#ff79c6">-</span>arg stringArray  传入变量值
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ENV <span style="color:#ff79c6">&lt;</span>key<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&lt;</span>value<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>ENV <span style="color:#ff79c6">&lt;</span>key1<span style="color:#ff79c6">&gt;=&lt;</span>value1<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&lt;</span>key2<span style="color:#ff79c6">&gt;=&lt;</span>value2<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 用于指定环境变量，可以用于镜像构建运行时被其他指令如RUN使用，也可以在容器中获取这些环境变量</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="workdir">WORKDIR<a class="anchor" href="#workdir"></a></h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>WORKDIR path
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 容器打开后默认进入的目录，在后续的 RUN、CMD、ENTRYPOINT、ADD 等指令中会引用该目录
+</span></span><span style="display:flex;"><span>// 可以设置多个 WORKDIR 指令。后续 WORKDIR 指令会基于之前 WORKDIR 指令指定的路径
+</span></span><span style="display:flex;"><span>// 在使用 docker run 运行容器时，可以通过-w 参数覆盖构建时所设置的工作目录</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="run--cmd--entrypoint">RUN / CMD / ENTRYPOINT<a class="anchor" href="#run--cmd--entrypoint"></a></h2>
+<table>
+	<thead>
+			<tr>
+					<th style="text-align: left">指令</th>
+					<th style="text-align: left">执行时机</th>
+					<th style="text-align: left">用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left"><code>RUN</code></td>
+					<td style="text-align: left"><strong>构建镜像时</strong></td>
+					<td style="text-align: left">安装软件、执行命令,结果固化进镜像层；用 <code>&amp;&amp;</code> 合并命令减少层数</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>CMD</code></td>
+					<td style="text-align: left"><strong>容器启动时</strong></td>
+					<td style="text-align: left">定义容器默认运行的命令,可被 <code>docker run</code> 后面的参数<strong>覆盖</strong></td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><code>ENTRYPOINT</code></td>
+					<td style="text-align: left"><strong>容器启动时</strong></td>
+					<td style="text-align: left">定义容器固定默认运行的命令,不易被覆盖</td>
+			</tr>
+	</tbody>
+</table>
+<ol>
+<li>无论是 CMD 还是 ENTRYPOINT，使用[“EXECUTABLE”]方式的通用性会更强些</li>
+<li>docker run [OPTIONS] IMAGE [COMMAND] [ARG&hellip;]
+<ol>
+<li>CMD可以自己指定[COMMAND] [ARG&hellip;]，第一个参数一定为[COMMAND]</li>
+<li>ENTRYPOINT不能指定 [COMMAND] ，默认全是[ARG&hellip;]
+<ul>
+<li>如果是[command]指定的 shell不会与 docker run 中的[ARG]进行拼接后运行</li>
+<li>如果是[“EXECUTABLE”]指定的命令，daemon 则会先与 docker run 中的[ARG]进行拼接，然后再运行拼接后的结果。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>RUN &lt;command&gt;
+</span></span><span style="display:flex;"><span>RUN [&#34;EXECUTABLE&#34;,&#34;PARAM1&#34;,&#34;PARAM2&#34;, ...]
+</span></span><span style="display:flex;"><span>// docker build 执行过程中调用
+</span></span><span style="display:flex;"><span>--- shell 指定的 command
+</span></span><span style="display:flex;"><span>--- &#34;EXECUTABLE&#34;指定的应用程序，并使用后面参数作为应用程序的运行参数</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>CMD [&#34;EXECUTABLE&#34;,&#34;PARAM1&#34;,&#34;PARAM2&#34;, ...]
+</span></span><span style="display:flex;"><span>CMD command param1 param2, ...
+</span></span><span style="display:flex;"><span>// 在容器启动后，即在执行完 docker run 后会立即调用
+</span></span><span style="display:flex;"><span>--  &#34;EXECUTABLE&#34;指定的可执行文件，并使用后面参数作为应用程序的运行参数
+</span></span><span style="display:flex;"><span>--  command指定的 shell 命令
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>CMD [&#34;PARAM1&#34;,&#34;PARAM2&#34;, ...]
+</span></span><span style="display:flex;"><span>// ENTRYPOINT 固定程序,CMD 提供默认参数</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>ENTRYPOINT [&#34;EXECUTABLE&#34;,&#34;PARAM1&#34;,&#34;PARAM2&#34;, ...]
+</span></span><span style="display:flex;"><span>ENTRYPOINT command param1 param2, ...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 在容器启动后，即在执行完 docker run 后会立即调用
+</span></span><span style="display:flex;"><span>---  &#34;EXECUTABLE&#34;指定的可执行文件，并使用后面参数作为应用程序的运行参数
+</span></span><span style="display:flex;"><span>---  command指定的 shell 命令</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="expose">EXPOSE<a class="anchor" href="#expose"></a></h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>EXPOSE &lt;port&gt; [&lt;port&gt;...]
+</span></span><span style="display:flex;"><span>// 可用于指定容器内服务运行的端口号
+</span></span><span style="display:flex;"><span>// 也可用于指定推荐暴露的端口号，实际暴露仍需 -p 指定</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="add--copy">ADD / COPY<a class="anchor" href="#add--copy"></a></h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>ADD &lt;src&gt; &lt;dest&gt;
+</span></span><span style="display:flex;"><span>ADD [&#34;&lt;src&gt;&#34;, &#34;&lt;dest&gt;&#34;] # 路径中存在空格时使用双引号引起来
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 该指令将复制当前宿主机中指定文件/目录 src 到容器中的指定目录 dest 中
+</span></span><span style="display:flex;"><span>--- dest 是一个绝对路径，其最后面的路径必须要加上斜杠
+</span></span><span style="display:flex;"><span>--- src 可以是宿主机中的绝路径，也可以时相对路径(相对于 docker build 命令所指定的路径)
+</span></span><span style="display:flex;"><span>--- src 可以是一个压缩文件，会自动解压为目录
+</span></span><span style="display:flex;"><span>--- src 也可以是一个 URL，此时的 ADD 指令相当于 wget 命令
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>COPY &lt;src&gt; &lt;dest&gt;
+</span></span><span style="display:flex;"><span>// 功能与 ADD 指令相同
+</span></span><span style="display:flex;"><span>---  src 不能是 URL。
+</span></span><span style="display:flex;"><span>--- src 为压缩文件，复制到容器后不会自动解压</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="onbuild">ONBUILD<a class="anchor" href="#onbuild"></a></h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>ONBUILD [INSTRUCTION]
+</span></span><span style="display:flex;"><span>// 该指令用于指定使用当前镜像构造子镜像时要执行的指令，当前镜像不会触发</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="volume">VOLUME<a class="anchor" href="#volume"></a></h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>VOLUME [&#34;dir1&#34;, “dir2”, ...]
+</span></span><span style="display:flex;"><span>// 在容器声明挂载点，宿主机数据卷位置自动指定</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="docker-build-命令">docker build 命令<a class="anchor" href="#docker-build-%e5%91%bd%e4%bb%a4"></a></h1>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>docker build [OPTIONS] PATH | URL | -
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-t, --tag	 给镜像命名打标签	
+</span></span><span style="display:flex;"><span>-f, --file	 指定 Dockerfile 路径与文件名(默认找PATH | URL 目录的 Dockerfile)	
+</span></span><span style="display:flex;"><span>--build-arg	 构建时传入变量,配合 Dockerfile 里的 ARG	
+</span></span><span style="display:flex;"><span>--no-cache   不用缓存,全部重新构建(排查问题时常用)	
+</span></span><span style="display:flex;"><span>--pull	     强制拉取最新的基础镜像	
+</span></span><span style="display:flex;"><span>-q, --quiet	 静默模式,只输出最终镜像 ID	
+</span></span><span style="display:flex;"><span>--platform	 交叉构建其他架构的镜像
+</span></span><span style="display:flex;"><span>--target     多阶段构建时,只构建到指定阶段</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="../20261004175516.png" alt="" /></p>
+<p>最后的点( . )是一个宿主机当前路径</p>
+<ul>
+<li>构建镜像时会默认从该路径中查找 Dockerfile 文件</li>
+<li>同时该路径也是在 Dockerfile 中 ADD、COPY 指令中使是用的相对路径</li>
+</ul>
+<p>一般 dockefile文件 与 add/copy的文件 应该放在同一个目录下</p>
+<h1 id="build-cache及镜像构造过程">build cache及镜像构造过程<a class="anchor" href="#build-cache%e5%8f%8a%e9%95%9c%e5%83%8f%e6%9e%84%e9%80%a0%e8%bf%87%e7%a8%8b"></a></h1>
+<p>Docker Daemnon 通过 Dockerfile 构建镜像时，当发现即将新构建出的镜像(层)与本地已存在的某镜像(层)重复时，默认会复用已存在镜像(层)而不是重新构建新的镜像(层)，这种机制称为 docker build cache 机制。</p>
+<ul>
+<li>加快了镜像的构建过程</li>
+<li>大量节省了Docker 宿主机的空间。</li>
+</ul>
+<p>docker build cache 是一种对磁盘中相应镜像层的检索、复用机制。只要该镜像(层)存在于本地，那么就会复用</p>
+<p>Docker 镜像的构建过程，大量应用了镜像间的父子关系。即下层镜像是作为上层镜像的父镜像出现，上层镜像是在下层镜像的基础之上变化而来。</p>
+<p>镜像层文件系统或其 JSON 文件内容发生了变化，就会产生新的镜像层，生成新的镜像 ID</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>FROM centos:<span style="color:#bd93f9">7</span>              <span style="color:#ff79c6">//</span>不会产生新的镜像层，使用指定的镜像作为基础镜像层
+</span></span><span style="display:flex;"><span>LABEL auth<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Tom&#34;</span>           <span style="color:#ff79c6">//</span>修改上一步中提取出的镜像 json 文件，生成新的镜像层
+</span></span><span style="display:flex;"><span>COPY hello<span style="color:#ff79c6">.</span>log <span style="color:#ff79c6">/</span><span style="color:#ff79c6">var</span><span style="color:#ff79c6">/</span><span style="color:#8be9fd;font-style:italic">log</span><span style="color:#ff79c6">/</span>   <span style="color:#ff79c6">//</span>改变该镜像层文件系统，生成新的镜像层
+</span></span><span style="display:flex;"><span>RUN yum <span style="color:#ff79c6">-</span>y install vim     <span style="color:#ff79c6">//</span>RUN 指令本身并不会改变镜像层文件系统大小，但由于其 RUN 的命令改变了镜像层文件系统，产生了新的镜像层
+</span></span><span style="display:flex;"><span>CMD <span style="color:#ff79c6">/</span>bin<span style="color:#ff79c6">/</span>bash              <span style="color:#ff79c6">//</span>该条指令写入到 json 文件中，会引发 json 文件的变化，产生了新的镜像层</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="../20261004180755.png" alt="" /></p>
+<p>再次构建指令以及父镜像层相同的镜像层会使用build cacha，而且拥有相同的镜像号</p>
+<p><img src="../20261004181204.png" alt="" /></p>
+<p><img src="../20261004181235.png" alt="" /></p>
+<h2 id="build-cache-失效">build cache 失效<a class="anchor" href="#build-cache-%e5%a4%b1%e6%95%88"></a></h2>
+<ol>
+<li>Dockerfile <strong>某个指令内容发生变化</strong>，那么从发生变化的这个指令层开始以及所有子镜像层 cache 全部失效</li>
+<li>Dockerfile 文件内容没有变化，但 <strong>ADD 或 COPY 指令所复制的文件内容发生了变化</strong>，发生变化的这个指令层开始以及所有子镜像层 cache 全部失效</li>
+<li>Dockerfile 文件内容没有变化，但 <strong>RUN 命令的外部依赖发生了变更</strong>(版本变化、下载地址变化等)，发生变化的这个指令层开始以及所有子镜像层 cache 全部失效</li>
+<li><strong>指定不使用</strong> build cache确保在镜像构建过程中使用到新的数据</li>
+</ol>
+<p><img src="../20261004185450.png" alt="" /></p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+  <a class="flex align-center" href="https://54deer.github.io/edit/main/content/content/docs/Docker/docker4.md" target="_blank" rel="noopener edit">
+    <img src="/icons/edit.svg" class="book-icon" alt="Edit" />
+    <span>编辑本页</span>
+  </a>
+
+</div>
+
+</div>
+
+<div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/Docker/Docker3/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Docker 容器</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/Docker/docker5/" class="flex align-center">
+        <span>Docker 数据持久化</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay" aria-hidden="true"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#dockerfile-简介">Dockerfile 简介</a></li>
+    <li><a href="#指令">指令</a>
+      <ul>
+        <li><a href="#from">FROM</a></li>
+        <li><a href="#maintainer--label">MAINTAINER / LABEL</a></li>
+        <li><a href="#env--arg">ENV / ARG</a></li>
+        <li><a href="#workdir">WORKDIR</a></li>
+        <li><a href="#run--cmd--entrypoint">RUN / CMD / ENTRYPOINT</a></li>
+        <li><a href="#expose">EXPOSE</a></li>
+        <li><a href="#add--copy">ADD / COPY</a></li>
+        <li><a href="#onbuild">ONBUILD</a></li>
+        <li><a href="#volume">VOLUME</a></li>
+      </ul>
+    </li>
+    <li><a href="#docker-build-命令">docker build 命令</a></li>
+    <li><a href="#build-cache及镜像构造过程">build cache及镜像构造过程</a>
+      <ul>
+        <li><a href="#build-cache-失效">build cache 失效</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

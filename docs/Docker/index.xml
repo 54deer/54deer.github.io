@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>Docker on 54deer の BLOG</title>
+		<title>docker on 54deer の BLOG</title>
 		<link>https://54deer.github.io/docs/Docker/</link>
-		<description>Recent content in Docker on 54deer の BLOG</description>
+		<description>Recent content in docker on 54deer の BLOG</description>
 		<generator>Hugo</generator>
 		<language>zh</language>
 		
@@ -23,7 +23,7 @@
 				<link>https://54deer.github.io/docs/Docker/Docker2/</link>
 				<pubDate>Sat, 03 Oct 2026 00:00:00 +0800</pubDate>
 				<guid>https://54deer.github.io/docs/Docker/Docker2/</guid>
-				<description>&lt;h1 id=&#34;镜像基础&#34;&gt;镜像基础&lt;a class=&#34;anchor&#34; href=&#34;#%e9%95%9c%e5%83%8f%e5%9f%ba%e7%a1%80&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;镜像是一种轻量级、可执行的独立软件包/一个精简的操作系统&lt;/li&gt;&#xA;&lt;li&gt;镜像中包含&lt;strong&gt;应用软件及应用软件的运行环境&lt;/strong&gt;。具体来说镜像包含运行某个软件所需的所有内容，包括代码、库、环境变量和配置文件等&lt;/li&gt;&#xA;&lt;li&gt;镜像的运行时是容器&lt;/li&gt;&#xA;&lt;li&gt;镜像中不包含内核，其共享宿主机的内核&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;镜像中心与仓库&#34;&gt;镜像中心与仓库&lt;a class=&#34;anchor&#34; href=&#34;#%e9%95%9c%e5%83%8f%e4%b8%ad%e5%bf%83%e4%b8%8e%e4%bb%93%e5%ba%93&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;镜像中心默认使用的都是 Docker 官方的 Docker Hub；也可指定第三方镜像中心&amp;lt; domain-name（域名或 IP）&amp;gt;/&amp;lt; repository&amp;gt;&lt;/p&gt;</description>
+				<description>&lt;h1 id=&#34;镜像基础&#34;&gt;镜像基础&lt;a class=&#34;anchor&#34; href=&#34;#%e9%95%9c%e5%83%8f%e5%9f%ba%e7%a1%80&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;镜像是一种轻量级、可执行的独立软件包/一个精简的操作系统&lt;/li&gt;&#xA;&lt;li&gt;镜像中包含&lt;strong&gt;应用软件及应用软件的运行环境&lt;/strong&gt;。具体来说镜像包含运行某个软件所需的所有内容，包括代码、库、环境变量和配置文件等&lt;/li&gt;&#xA;&lt;li&gt;镜像的运行时是容器&lt;/li&gt;&#xA;&lt;li&gt;镜像中不包含内核，其共享宿主机的内核&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;对于任何镜像，都可通过&amp;lt; repository &amp;gt;:&amp;lt; tag &amp;gt;进行唯一定位。其中&amp;lt; tag &amp;gt;一般称为镜像的版本号。&amp;lt; tag&amp;gt; 中有一个比较特殊的版本——latest。如果不指定，默认&amp;lt; tag &amp;gt;即为 latest&lt;/p&gt;</description>
 			</item>
 			<item>
 				<title>Docker 容器</title>
@@ -31,6 +31,20 @@
 				<pubDate>Sun, 04 Oct 2026 00:00:00 +0800</pubDate>
 				<guid>https://54deer.github.io/docs/Docker/Docker3/</guid>
 				<description>&lt;h1 id=&#34;容器基础&#34;&gt;容器基础&lt;a class=&#34;anchor&#34; href=&#34;#%e5%ae%b9%e5%99%a8%e5%9f%ba%e7%a1%80&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;容器是镜像的运行时&lt;/p&gt;&#xA;&lt;p&gt;Docker 容器存在的意义就是为了运行容器中的应用，对外提供服务，所以启动容器的目的就是启动运行该容器中的应用。&lt;/p&gt;&#xA;&lt;p&gt;容器中的应用运行完毕后，容器就会自动终止。如果不想让容器启动后立即终止运行，则就需要使应用处于与&lt;strong&gt;交互状态或等待状态&lt;/strong&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Dockerfile</title>
+				<link>https://54deer.github.io/docs/Docker/docker4/</link>
+				<pubDate>Sun, 04 Oct 2026 00:00:00 +0800</pubDate>
+				<guid>https://54deer.github.io/docs/Docker/docker4/</guid>
+				<description>&lt;h1 id=&#34;dockerfile-简介&#34;&gt;Dockerfile 简介&lt;a class=&#34;anchor&#34; href=&#34;#dockerfile-%e7%ae%80%e4%bb%8b&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Dockerfile 是用于构建 Docker 镜像的&lt;strong&gt;脚本文件&lt;/strong&gt;，由一系列指令构成&lt;/p&gt;&#xA;&lt;p&gt;通过&lt;strong&gt;docker build&lt;/strong&gt;命令构建镜像时，Dockerfile 中的指令会由上到下依次执行，每条指令都将会构建出一个镜像层&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Docker 数据持久化</title>
+				<link>https://54deer.github.io/docs/Docker/docker5/</link>
+				<pubDate>Sun, 04 Oct 2026 00:00:00 +0800</pubDate>
+				<guid>https://54deer.github.io/docs/Docker/docker5/</guid>
+				<description>&lt;h1 id=&#34;持久化概述&#34;&gt;持久化概述&lt;a class=&#34;anchor&#34; href=&#34;#%e6%8c%81%e4%b9%85%e5%8c%96%e6%a6%82%e8%bf%b0&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;在容器层的 UnionFS（联合文件系统）中对文件/目录的任何修改，在该容器丢失或被删除后这些修改将全部丢失。&lt;/p&gt;&#xA;&lt;p&gt;若要保存下来这些修改，通常有两种方式：&lt;/p&gt;</description>
 			</item>
 	</channel>
 </rss>
