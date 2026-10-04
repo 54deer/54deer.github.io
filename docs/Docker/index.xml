@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>About Me on 54deer の BLOG</title>
-		<link>https://54deer.github.io/</link>
-		<description>Recent content in About Me on 54deer の BLOG</description>
+		<title>Git on 54deer の BLOG</title>
+		<link>https://54deer.github.io/docs/Docker/</link>
+		<description>Recent content in Git on 54deer の BLOG</description>
 		<generator>Hugo</generator>
 		<language>zh</language>
 		
 		
 		
 		
-			<lastBuildDate>Sun, 04 Oct 2026 11:53:56 +0800</lastBuildDate>
-		
-			<atom:link href="https://54deer.github.io/index.xml" rel="self" type="application/rss+xml" />
+			<atom:link href="https://54deer.github.io/docs/Docker/index.xml" rel="self" type="application/rss+xml" />
 			<item>
 				<title>Docker 概述</title>
 				<link>https://54deer.github.io/docs/Docker/Docker-1/</link>
@@ -21,32 +19,11 @@
 				<description>&lt;h1 id=&#34;docker-简介&#34;&gt;docker 简介&lt;a class=&#34;anchor&#34; href=&#34;#docker-%e7%ae%80%e4%bb%8b&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Docker 是一个使用 Go 语言开发的开源的应用容器引擎， 其可以让开发者将应用及应用运行的环境打包到一个轻量级、可移植的镜像中，然后发布到任何流行的 Linux、Windows 机器上&lt;/p&gt;</description>
 			</item>
 			<item>
-				<title>Git</title>
-				<link>https://54deer.github.io/docs/git/Git/</link>
-				<pubDate>Thu, 01 Oct 2026 00:00:00 +0800</pubDate>
-				<guid>https://54deer.github.io/docs/git/Git/</guid>
-				<description>&lt;h1 id=&#34;1-版本控制&#34;&gt;1. 版本控制&lt;a class=&#34;anchor&#34; href=&#34;#1-%e7%89%88%e6%9c%ac%e6%8e%a7%e5%88%b6&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;客户端并不只提取最新版本的文件快照， 而是把代码仓库完整地镜像下来，包括完整的历史记录。 这么一来，任何一处协同工作用的服务器发生故障，事后都可以用任何一个镜像出来的本地仓库恢复&#xA;![[Pasted image 20260914215935.png|443]]&lt;/p&gt;</description>
-			</item>
-			<item>
-				<title>mongoDB 基础知识</title>
-				<link>https://54deer.github.io/docs/mongoDB/1/</link>
-				<pubDate>Thu, 01 Oct 2026 00:00:00 +0800</pubDate>
-				<guid>https://54deer.github.io/docs/mongoDB/1/</guid>
-				<description>&lt;h1 id=&#34;简介&#34;&gt;简介&lt;a class=&#34;anchor&#34; href=&#34;#%e7%ae%80%e4%bb%8b&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;MongoDB是&lt;strong&gt;文档数据库&lt;/strong&gt;（&lt;strong&gt;面向文档&lt;/strong&gt;的可操作数据库），是作为现代应用程序关系数据库的替代方案而全新构建的。与关系数据库不同， MongoDB允许开发者存储丰富的类似JSON的文档&lt;/p&gt;</description>
-			</item>
-			<item>
 				<title>Docker 镜像</title>
 				<link>https://54deer.github.io/docs/Docker/Docker2/</link>
 				<pubDate>Sat, 03 Oct 2026 00:00:00 +0800</pubDate>
 				<guid>https://54deer.github.io/docs/Docker/Docker2/</guid>
 				<description>&lt;h1 id=&#34;镜像基础&#34;&gt;镜像基础&lt;a class=&#34;anchor&#34; href=&#34;#%e9%95%9c%e5%83%8f%e5%9f%ba%e7%a1%80&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;镜像是一种轻量级、可执行的独立软件包/一个精简的操作系统&lt;/li&gt;&#xA;&lt;li&gt;镜像中包含&lt;strong&gt;应用软件及应用软件的运行环境&lt;/strong&gt;。具体来说镜像包含运行某个软件所需的所有内容，包括代码、库、环境变量和配置文件等&lt;/li&gt;&#xA;&lt;li&gt;镜像的运行时是容器&lt;/li&gt;&#xA;&lt;li&gt;镜像中不包含内核，其共享宿主机的内核&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;镜像中心与仓库&#34;&gt;镜像中心与仓库&lt;a class=&#34;anchor&#34; href=&#34;#%e9%95%9c%e5%83%8f%e4%b8%ad%e5%bf%83%e4%b8%8e%e4%bb%93%e5%ba%93&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;镜像中心默认使用的都是 Docker 官方的 Docker Hub；也可指定第三方镜像中心&amp;lt; domain-name（域名或 IP）&amp;gt;/&amp;lt; repository&amp;gt;&lt;/p&gt;</description>
-			</item>
-			<item>
-				<title>mongosh CURD操作</title>
-				<link>https://54deer.github.io/docs/mongoDB/2/</link>
-				<pubDate>Fri, 02 Oct 2026 00:00:00 +0800</pubDate>
-				<guid>https://54deer.github.io/docs/mongoDB/2/</guid>
-				<description>&lt;blockquote class=&#39;book-hint &#39;&gt;&#xA;&lt;p&gt;db.collection.function()是方法链，db指数据库对象（当前数据库，不需改动），collection指该库下的集合对象(需指定)，.function()指集合的方法&lt;/p&gt;&#xA;&lt;/blockquote&gt;</description>
 			</item>
 			<item>
 				<title>Docker 容器</title>

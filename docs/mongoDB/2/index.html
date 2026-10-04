@@ -8,31 +8,31 @@ https://github.com/alex-shpak/hugo-book
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="1. 版本控制 客户端并不只提取最新版本的文件快照， 而是把代码仓库完整地镜像下来，包括完整的历史记录。 这么一来，任何一处协同工作用的服务器发生故障，事后都可以用任何一个镜像出来的本地仓库恢复 ![[Pasted image 20260914215935.png|443]]
+<meta name="description" content=" db.collection.function()是方法链，db指数据库对象（当前数据库，不需改动），collection指该库下的集合对象(需指定)，.function()指集合的方法
 ">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
-<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://54deer.github.io/docs/git/Git/">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://54deer.github.io/docs/mongoDB/2/">
 	<meta property="og:site_name" content="54deer の BLOG">
-	<meta property="og:title" content="Git">
-	<meta property="og:description" content="1. 版本控制 客户端并不只提取最新版本的文件快照， 而是把代码仓库完整地镜像下来，包括完整的历史记录。 这么一来，任何一处协同工作用的服务器发生故障，事后都可以用任何一个镜像出来的本地仓库恢复 ![[Pasted image 20260914215935.png|443]]">
+	<meta property="og:title" content="mongosh CURD操作">
+	<meta property="og:description" content="db.collection.function()是方法链，db指数据库对象（当前数据库，不需改动），collection指该库下的集合对象(需指定)，.function()指集合的方法">
 	<meta property="og:locale" content="zh">
 	<meta property="og:type" content="article">
 		<meta property="article:section" content="docs">
-		<meta property="article:published_time" content="2026-10-01T00:00:00+08:00">
-		<meta property="article:modified_time" content="2026-10-01T16:24:12+08:00">
+		<meta property="article:published_time" content="2026-10-02T00:00:00+08:00">
+		<meta property="article:modified_time" content="2026-10-04T11:53:56+08:00">
 
 
-	<meta itemprop="name" content="Git">
-	<meta itemprop="description" content="1. 版本控制 客户端并不只提取最新版本的文件快照， 而是把代码仓库完整地镜像下来，包括完整的历史记录。 这么一来，任何一处协同工作用的服务器发生故障，事后都可以用任何一个镜像出来的本地仓库恢复 ![[Pasted image 20260914215935.png|443]]">
-	<meta itemprop="datePublished" content="2026-10-01T00:00:00+08:00">
-	<meta itemprop="dateModified" content="2026-10-01T16:24:12+08:00">
-	<meta itemprop="wordCount" content="761">
+	<meta itemprop="name" content="mongosh CURD操作">
+	<meta itemprop="description" content="db.collection.function()是方法链，db指数据库对象（当前数据库，不需改动），collection指该库下的集合对象(需指定)，.function()指集合的方法">
+	<meta itemprop="datePublished" content="2026-10-02T00:00:00+08:00">
+	<meta itemprop="dateModified" content="2026-10-04T11:53:56+08:00">
+	<meta itemprop="wordCount" content="1248">
 
-<title>Git • 54deer の BLOG</title>
+<title>mongosh CURD操作 • 54deer の BLOG</title>
 <link rel="icon" href="/favicon.png" >
 <link rel="manifest" href="/manifest.json">
-<link rel="canonical" href="https://54deer.github.io/docs/git/Git/">
+<link rel="canonical" href="https://54deer.github.io/docs/mongoDB/2/">
 <link rel="stylesheet" href="/book.min.a02ac497c6d6e5c0a81db7ed78d24326ef87e617cb865bebfbe4d1a1d6ee6573.css" integrity="sha256-oCrEl8bW5cCoHbfteNJDJu&#43;H5hfLhlvr&#43;&#43;TRodbuZXM=" crossorigin="anonymous">
 
 
@@ -241,7 +241,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <input type="checkbox" id="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="toggle"  />
+    <input type="checkbox" id="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="toggle" checked />
     <label for="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="flex">
       <a role="button" class="">
         mongoDB</a>
@@ -273,7 +273,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/docs/mongoDB/2/" class="">
+    <a href="/docs/mongoDB/2/" class="active">
       mongosh CURD操作</a>
   
 
@@ -357,7 +357,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <input type="checkbox" id="section-ed5bdd985a7ce57aea7f541f44e05eca" class="toggle" checked />
+    <input type="checkbox" id="section-ed5bdd985a7ce57aea7f541f44e05eca" class="toggle"  />
     <label for="section-ed5bdd985a7ce57aea7f541f44e05eca" class="flex">
       <a role="button" class="">
         Git</a>
@@ -375,7 +375,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/docs/git/Git/" class="active">
+    <a href="/docs/git/Git/" class="">
       Git</a>
   
 
@@ -423,7 +423,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <h3>Git</h3>
+  <h3>mongosh CURD操作</h3>
 
   
   <input type="checkbox" class="toggle" id="toc-control" />
@@ -440,11 +440,9 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-版本控制">1. 版本控制</a></li>
-    <li><a href="#2-文件状态">2. 文件状态</a></li>
-    <li><a href="#3-本地操作">3. 本地操作</a></li>
-    <li><a href="#4-分支操作">4. 分支操作</a></li>
-    <li><a href="#5-远程操作">5. 远程操作</a></li>
+    <li><a href="#常用命令">常用命令</a></li>
+    <li><a href="#插入">插入</a></li>
+    <li><a href="#查询">查询</a></li>
   </ul>
 </nav>
 
@@ -455,123 +453,172 @@ https://github.com/alex-shpak/hugo-book
  
       </header>
 
-      <h1>Git</h1>
+      <h1>mongosh CURD操作</h1>
 
 
 <div class="page-meta" style="opacity: 0.65; font-size: 0.85em; margin: -0.5em 0 1.5em 0;">
-  作者 0N0N0K1
+  作者 54deer
    · 
-  日期 2026-10-01
+  日期 2026-10-02
 </div>
 
       
-  <article class="markdown book-article"><h1 id="1-版本控制">1. 版本控制<a class="anchor" href="#1-%e7%89%88%e6%9c%ac%e6%8e%a7%e5%88%b6"></a></h1>
-<p>客户端并不只提取最新版本的文件快照， 而是把代码仓库完整地镜像下来，包括完整的历史记录。 这么一来，任何一处协同工作用的服务器发生故障，事后都可以用任何一个镜像出来的本地仓库恢复
-![[Pasted image 20260914215935.png|443]]</p>
-<h1 id="2-文件状态">2. 文件状态<a class="anchor" href="#2-%e6%96%87%e4%bb%b6%e7%8a%b6%e6%80%81"></a></h1>
-<p>未跟踪文件一般不会被git操作影响</p>
-<p>git status 查看文件详细状态
-git status -s  / git status &ndash;short 得到格式紧凑的状态</p>
-<p>![[Pasted image 20260914223430.png]]</p>
-<h1 id="3-本地操作">3. 本地操作<a class="anchor" href="#3-%e6%9c%ac%e5%9c%b0%e6%93%8d%e4%bd%9c"></a></h1>
-<p>![[Pasted image 20260915093633.png]]</p>
-<h1 id="4-分支操作">4. 分支操作<a class="anchor" href="#4-%e5%88%86%e6%94%af%e6%93%8d%e4%bd%9c"></a></h1>
+  <article class="markdown book-article"><blockquote class='book-hint '>
+<p>db.collection.function()是方法链，db指数据库对象（当前数据库，不需改动），collection指该库下的集合对象(需指定)，.function()指集合的方法</p>
+</blockquote><h1 id="常用命令">常用命令<a class="anchor" href="#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4"></a></h1>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
 <table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>//初始
-</span></span><span style="display:flex;"><span>main:    A --- B --- C
-</span></span><span style="display:flex;"><span>              \         
-</span></span><span style="display:flex;"><span>feature:       D --- E*
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>//main 合并完成的 feature 分支
-</span></span><span style="display:flex;"><span>main:    A --- B --- C --- F*
-</span></span><span style="display:flex;"><span>              \         /
-</span></span><span style="display:flex;"><span>feature:       D --- E
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>//feature 变基为 main 的 c 版本,main可以通过merge到E&#39;,与上面合并等效
-</span></span><span style="display:flex;"><span>main:    A --- B --- C  &lt;-main       
-</span></span><span style="display:flex;"><span>                      \        
-</span></span><span style="display:flex;"><span>feature:               D&#39; --- E&#39;*</span></span></code></pre></td></tr></table>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>db
+</span></span><span style="display:flex;"><span>use &lt;db&gt;
+</span></span><span style="display:flex;"><span>show dbs
+</span></span><span style="display:flex;"><span>cls   ctrl+l</span></span></code></pre></td></tr></table>
 </div>
-</div><ol>
-<li>切换分支的时候，Git 会重置你的工作目录，使其看起来像回到了你在那个分支上最后一次提交的样子, 但不会改变暂存区
-<ul>
-<li>注意==切换前原分支的内容是否提交，否则再切回去就无了==</li>
-<li>注意==切换前暂存区是否有文件，避免切换后载入污染==</li>
-</ul>
-</li>
-<li>变基可以使分支图更简洁
-- 只对尚未推送或分享给别人的本地修改执行变基操作清理历史， 从不对已推送至别处的提交执行变基操作</li>
-<li>合并分支前检查是否要合并的对象是否已提交，在最新提交记录上</li>
+</div><h1 id="插入">插入<a class="anchor" href="#%e6%8f%92%e5%85%a5"></a></h1>
+<p>将文档插入不存在的集合/数据库会创建该集合/数据库</p>
+<ol>
+<li>插入单一文档 <code>db.collection.insertOne()</code></li>
 </ol>
-<table>
-	<thead>
-			<tr>
-					<th style="text-align: center">功能</th>
-					<th style="text-align: center">命令</th>
-			</tr>
-	</thead>
-	<tbody>
-			<tr>
-					<td style="text-align: center">创建分支</td>
-					<td style="text-align: center">git branch &lt; name &gt;</td>
-			</tr>
-			<tr>
-					<td style="text-align: center">查看本地分支</td>
-					<td style="text-align: center">git branch</td>
-			</tr>
-			<tr>
-					<td style="text-align: center">查看远程分支</td>
-					<td style="text-align: center">git branch -r</td>
-			</tr>
-			<tr>
-					<td style="text-align: center">重命名当前分支</td>
-					<td style="text-align: center">git branch -m  &lt; newName &gt;</td>
-			</tr>
-			<tr>
-					<td style="text-align: center">删除（已合并）分支</td>
-					<td style="text-align: center">git branch -d &lt; name &gt;</td>
-			</tr>
-			<tr>
-					<td style="text-align: center">删除（未合并）分支</td>
-					<td style="text-align: center">git branch -D &lt; name &gt;</td>
-			</tr>
-			<tr>
-					<td style="text-align: center">当前分支合并其它分支</td>
-					<td style="text-align: center">git merge &lt; name &gt;</td>
-			</tr>
-			<tr>
-					<td style="text-align: center">变基</td>
-					<td style="text-align: center">git rebase &lt; name &gt;</td>
-			</tr>
-			<tr>
-					<td style="text-align: center">分离HEAD指针</td>
-					<td style="text-align: center">git checkout HEAD~&lt; n &gt;<br>git checkout &lt; branch_name &gt;<br>git checkout &lt; hash_num &gt;</td>
-			</tr>
-			<tr>
-					<td style="text-align: center"></td>
-					<td style="text-align: center"></td>
-			</tr>
-	</tbody>
-</table>
-<h1 id="5-远程操作">5. 远程操作<a class="anchor" href="#5-%e8%bf%9c%e7%a8%8b%e6%93%8d%e4%bd%9c"></a></h1>
-<p>![[Pasted image 20260915122921.png]]</p>
+<ul>
+<li>如果文档未指定 _id， MongoDB会添加一个</li>
+<li>将返回一个文档，其中包含新插入的文档的 _id 字段值</li>
+</ul>
+<ol start="2">
+<li>插入多个文档 <code>db.collection.insertMany()</code></li>
+</ol>
+<ul>
+<li>可以将多个文档插入到一个集合中</li>
+<li>插入必须是一个文档集合[ {name:&ldquo;54deer&rdquo;,age:20},{name:&ldquo;54deer&rdquo;,age:21} ]</li>
+</ul>
+<ol start="3">
+<li>通用插入 <code>db.collection.insert()</code></li>
+</ol>
+<ul>
+<li>支持插入单/多个文档</li>
+</ul>
+<h1 id="查询">查询<a class="anchor" href="#%e6%9f%a5%e8%af%a2"></a></h1>
+<p>find({}, {}) 第一个{}内是条件，第二个{}内是字段选择</p>
+<ol start="0">
+<li>
+<p>控制查询返回的项目字段<br>
+1（默认）：返回   0：忽略 <br>
+注意无条件时第一个{}不能省略<br>
+db.users.find({}, { name: 1, _id: 0 })</p>
+</li>
+<li>
+<p>全查询<br>
+<code>db.collection.find()</code></p>
+</li>
+<li>
+<p>等值查询（多个条件间是AND关系）<br>
+<code>db.collection.find( {  &lt;field1&gt;: &lt;value1&gt;, ... } )</code></p>
+</li>
+<li>
+<p>关系操作符范围查询<br>
+$gt  $gte  $in  $lt  $lte  $ne  $nin<br>
+<code>db.collection.find({ age: { $lt: 90 })</code></p>
+</li>
+<li>
+<p>查询操作符指定条件（多个条件间是AND关系）<br>
+<code>db.collection.find ( { &lt;field1&gt;: { &lt;operator1&gt;: &lt;value1&gt; }, ... } )</code></p>
+<ol>
+<li>$in/$nin 查询字段值在/不在数组中的文档<br>
+<code> db.collection.find({ name: { $in: ['54deer','deer'] } } )</code></li>
+<li>$or 查询会选择至少匹配一个条件的文档<br>
+<code> db.collection.find( { $or: [ { name: &quot;deer&quot; }, { age: { $gt: 20 } } ] } )</code></li>
+</ol>
+</li>
+<li>
+<p>查询返回单个文档<br>
+<code>db.collection.findOne()</code></p>
+</li>
+<li>
+<p>嵌入/嵌套文档的查询</p>
+<ol>
+<li>使用点表示法 &ldquo;field.childField&rdquo; 查询（字段和嵌套字段必须位于引号内）<br>
+<code>db.collection.find( { &quot;size.h&quot;: 15 } )</code></li>
+<li>完全匹配，包括<strong>字段顺序</strong><br>
+√：<code>db.collection.find( { size: { h: 14, w: 21, uom: &quot;cm&quot; } } )</code><br>
+×（字段顺序）：<code>db.collection.find( { size: { w: 21, h: 14, uom: &quot;cm&quot; } } )</code></li>
+</ol>
+</li>
+<li>
+<p>数组的查询</p>
+<ol>
+<li>
+<p>完全匹配，包括<strong>顺序</strong><br>
+<code>db.collection.find({age:[1,2,3,4,5]})</code></p>
+</li>
+<li>
+<p>模糊匹配，只需包含所有元素即可<br>
+<code>db.collection.find({age:{$all:[1,2,3,4,5] } } )</code><br>
+<code>db.collection.find({age:1})</code></p>
+</li>
+<li>
+<p>多条件</p>
+<ol>
+<li>数组元素共同作用使条件成立，并非每个元素都满足<br>
+<code>db.collection.find({age:{$gt:6,$eq:8} } )</code></li>
+<li>至少一个数组元素满足所有指定条件<br>
+db.collection.find({age:{$elemMatch:{$gt:6,$lt:8}} } )</li>
+</ol>
+</li>
+<li>
+<p>点表示法按数组索引位置查询元素<br>
+数组使用从零开始的索引，使用点表示法查询时，字段和嵌套字段必须位于引号内<br>
+<code>db.collection.find( { &quot;age.5&quot;: 6 } )</code></p>
+</li>
+<li>
+<p>按数组长度查询数组<br>
+db.collection.find( { age: { $size: 3 } } )</p>
+</li>
+</ol>
+</li>
+<li>
+<p>元素为文档的数组的查询（ { item: &ldquo;journal&rdquo;, instock: [ { warehouse: &ldquo;A&rdquo;, qty: 5 }, { warehouse: &ldquo;C&rdquo;, qty: 15 } ] }）</p>
+<ol>
+<li>完全匹配/模糊匹配/多条件 类似，只是元素换为一个文档</li>
+<li>在文档数组中嵌入的文档字段上指定查询条件
+<ol>
+<li>instock 数组至少有一份嵌入式文档元素包含字段 qty 且其值小于或等于 20<br>
+db.inventory.find( { &lsquo;instock.qty&rsquo;: { $lte: 20 } } )</li>
+<li>instock 数组的第一个元素是包含值小于或等于 20 的 qty 字段的文档<br>
+db.inventory.find( { &lsquo;instock.0.qty&rsquo;: { $lte: 20 } } )</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>NULL及缺失字段</p>
+<ol>
+<li>查询返回 movies集合中 metacritic字段包含 null 值或不存在的所有文档。<br>
+<code>db.movies.find( { metacritic: null } )</code></li>
+<li>查询匹配存在metacritic 字段且（不）具有非空值的文档<br>
+<code>db.movies.find( { metacritic: { $ne: null } } )</code></li>
+<li>数组字段上的相等性<br>
+当 a字段为 null、a字段缺失或 a数组包含至少一个 null 元素时，{ a: null }查询会匹配<br>
+空数组和没有 null 元素的数组不匹配<br>
+{ a: { $ne: null } }查询返回补集，即 { a: null } 不匹配的每个文档</li>
+<li>虚路径上的相等<br>
+从MongoDB 9.0 开始，{ &ldquo;a.b&rdquo;: null }查询会匹配以下任何情况下的文档：
+<ol>
+<li>字段为 null</li>
+<li>a字段缺失</li>
+<li>a字段是文档数组，其中至少有一个 b 缺失或 null 的文档<br>
+空数组和非文档数组不匹配</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>超时控制</p>
+</li>
+</ol>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
 <table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
@@ -592,30 +639,26 @@ git status -s  / git status &ndash;short 得到格式紧凑的状态</p>
 </span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
 </span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
 </span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span># 查看远程
-</span></span><span style="display:flex;"><span>git remote -v                         # 查看远程仓库地址
-</span></span><span style="display:flex;"><span>git remote show origin                # 查看 origin 详细信息
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 方式一：游标方法
+</span></span><span style="display:flex;"><span>db.users.find({ age: { $gte: 18 } }).maxTimeMS(5000)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span># 添加 / 修改 / 删除远程
-</span></span><span style="display:flex;"><span>git remote add &lt;name&gt; &lt;url&gt;           # 添加远程仓库
-</span></span><span style="display:flex;"><span>git remote rename &lt;oldname&gt; &lt;newname&gt; # 重命名远程
-</span></span><span style="display:flex;"><span>git remote remove &lt;name&gt;              # 删除远程
+</span></span><span style="display:flex;"><span>// 方式二：选项形式
+</span></span><span style="display:flex;"><span>db.users.find(
+</span></span><span style="display:flex;"><span>  { age: { $gte: 18 } },
+</span></span><span style="display:flex;"><span>  { maxTimeMS: 5000 }
+</span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span># 抓取更新，不合并
-</span></span><span style="display:flex;"><span>git fetch &lt;remotename&gt;                    # 抓取 origin 更新
-</span></span><span style="display:flex;"><span>git fetch &lt;remotename&gt; &lt;remotebranch&gt;     # 抓取指定分支
+</span></span><span style="display:flex;"><span>// 查看当前值
+</span></span><span style="display:flex;"><span>db.adminCommand({ getClusterParameter: &#34;defaultMaxTimeMS&#34; })
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span># 拉取并合并
-</span></span><span style="display:flex;"><span>git pull &lt;remotename&gt; &lt;remotebranch&gt;                 # fetch + merge
-</span></span><span style="display:flex;"><span>git pull --rebase &lt;remotename&gt; &lt;remotebranch&gt;        # fetch + rebase
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span># 推送
-</span></span><span style="display:flex;"><span>git push &lt;remotename&gt;  &lt;localBranch&gt;:&lt;remoteBranch&gt;   # 本地分支推送到远程分支
-</span></span><span style="display:flex;"><span>git push --all origin                 # 推送所有本地分支</span></span></code></pre></td></tr></table>
+</span></span><span style="display:flex;"><span>// 设置全局默认 10 秒
+</span></span><span style="display:flex;"><span>db.adminCommand({
+</span></span><span style="display:flex;"><span>  setClusterParameter: {
+</span></span><span style="display:flex;"><span>    defaultMaxTimeMS: { maxTimeMS: 10000 }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>})</span></span></code></pre></td></tr></table>
 </div>
 </div></article>
  
@@ -631,7 +674,7 @@ git status -s  / git status &ndash;short 得到格式紧凑的状态</p>
 
 <div>
 
-  <a class="flex align-center" href="https://54deer.github.io/edit/main/content/content/docs/git/Git.md" target="_blank" rel="noopener edit">
+  <a class="flex align-center" href="https://54deer.github.io/edit/main/content/content/docs/mongoDB/2.md" target="_blank" rel="noopener edit">
     <img src="/icons/edit.svg" class="book-icon" alt="Edit" />
     <span>编辑本页</span>
   </a>
@@ -643,13 +686,18 @@ git status -s  / git status &ndash;short 得到格式紧凑的状态</p>
 <div class="flex flex-wrap justify-between">
     <span>
     
-      <a href="/docs/Docker/Docker3/" class="flex align-center">
+      <a href="/docs/mongoDB/1/" class="flex align-center">
         <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
-        <span>Docker 容器</span>
+        <span>mongoDB 基础知识</span>
       </a>
     
     </span>
     <span>
+    
+      <a href="/docs/Docker/Docker-1/" class="flex align-center">
+        <span>Docker 概述</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
     
     </span>
   </div>
@@ -680,11 +728,9 @@ git status -s  / git status &ndash;short 得到格式紧凑的状态</p>
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-版本控制">1. 版本控制</a></li>
-    <li><a href="#2-文件状态">2. 文件状态</a></li>
-    <li><a href="#3-本地操作">3. 本地操作</a></li>
-    <li><a href="#4-分支操作">4. 分支操作</a></li>
-    <li><a href="#5-远程操作">5. 远程操作</a></li>
+    <li><a href="#常用命令">常用命令</a></li>
+    <li><a href="#插入">插入</a></li>
+    <li><a href="#查询">查询</a></li>
   </ul>
 </nav>
 

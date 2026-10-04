@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr" data-theme="auto">
+<head>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="容器基础 容器是镜像的运行时
+Docker 容器存在的意义就是为了运行容器中的应用，对外提供服务，所以启动容器的目的就是启动运行该容器中的应用。
+容器中的应用运行完毕后，容器就会自动终止。如果不想让容器启动后立即终止运行，则就需要使应用处于与交互状态或等待状态
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://54deer.github.io/docs/Docker/Docker3/">
+	<meta property="og:site_name" content="54deer の BLOG">
+	<meta property="og:title" content="Docker 容器">
+	<meta property="og:description" content="容器基础 容器是镜像的运行时
+Docker 容器存在的意义就是为了运行容器中的应用，对外提供服务，所以启动容器的目的就是启动运行该容器中的应用。
+容器中的应用运行完毕后，容器就会自动终止。如果不想让容器启动后立即终止运行，则就需要使应用处于与交互状态或等待状态">
+	<meta property="og:locale" content="zh">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="docs">
+		<meta property="article:published_time" content="2026-10-04T00:00:00+08:00">
+		<meta property="article:modified_time" content="2026-10-04T11:53:56+08:00">
+
+
+	<meta itemprop="name" content="Docker 容器">
+	<meta itemprop="description" content="容器基础 容器是镜像的运行时
+Docker 容器存在的意义就是为了运行容器中的应用，对外提供服务，所以启动容器的目的就是启动运行该容器中的应用。
+容器中的应用运行完毕后，容器就会自动终止。如果不想让容器启动后立即终止运行，则就需要使应用处于与交互状态或等待状态">
+	<meta itemprop="datePublished" content="2026-10-04T00:00:00+08:00">
+	<meta itemprop="dateModified" content="2026-10-04T11:53:56+08:00">
+	<meta itemprop="wordCount" content="1593">
+
+<title>Docker 容器 • 54deer の BLOG</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="https://54deer.github.io/docs/Docker/Docker3/">
+<link rel="stylesheet" href="/book.min.a02ac497c6d6e5c0a81db7ed78d24326ef87e617cb865bebfbe4d1a1d6ee6573.css" integrity="sha256-oCrEl8bW5cCoHbfteNJDJu&#43;H5hfLhlvr&#43;&#43;TRodbuZXM=" crossorigin="anonymous">
+
+
+<script type="module" src="/zh.search.min.d983291ea6609270a7796ec169a476ec895399f7862fd492f7d0ec22c78ee981.js" integrity="sha256-2YMpHqZgknCneW7BaaR27IlTmfeGL9SS99DsIseO6YE=" crossorigin="anonymous"></script>
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>54deer の BLOG</span>
+  </a>
+</h2>
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text"
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+<ul><li><a href="/">🏠 About Me</a></li><li><a href="https://github.com/54deer" target="_blank" rel="noopener">🔗 GitHub</a></li></ul>
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-9e24d28b120804ba6357f6fbea8c5d7d" class="toggle"  />
+    <label for="section-9e24d28b120804ba6357f6fbea8c5d7d" class="flex">
+      <a role="button" class="">
+        Golang</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-81b3b35a677bb5efb846d979849ae55f" class="toggle"  />
+    <label for="section-81b3b35a677bb5efb846d979849ae55f" class="flex">
+      <a role="button" class="">
+        GO 标准库</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-7932a59f0acc34d9eb509b606d8c3e7f" class="toggle"  />
+    <label for="section-7932a59f0acc34d9eb509b606d8c3e7f" class="flex">
+      <a role="button" class="">
+        GO 三方库</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-af6c0eda4d2cdd556cc66540bdce0b76" class="toggle"  />
+    <label for="section-af6c0eda4d2cdd556cc66540bdce0b76" class="flex">
+      <a role="button" class="">
+        pgSQL&amp;MySQL</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-fa7c9692409e20f1f52ebe77c4c5e801" class="toggle"  />
+    <label for="section-fa7c9692409e20f1f52ebe77c4c5e801" class="flex">
+      <a role="button" class="">
+        SQL&amp;GORM</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-a7abf702dde8fdc025b82feea1d6ba03" class="toggle"  />
+    <label for="section-a7abf702dde8fdc025b82feea1d6ba03" class="flex">
+      <a role="button" class="">
+        Redis</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-2b000412833c87b0e53129bd1d6feab9" class="toggle"  />
+    <label for="section-2b000412833c87b0e53129bd1d6feab9" class="flex">
+      <a role="button" class="">
+        RabbitMQ</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="toggle"  />
+    <label for="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="flex">
+      <a role="button" class="">
+        mongoDB</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/mongoDB/1/" class="">
+      mongoDB 基础知识</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/mongoDB/2/" class="">
+      mongosh CURD操作</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-4a86b6f03b2baaea23efad445fdd13a5" class="toggle" checked />
+    <label for="section-4a86b6f03b2baaea23efad445fdd13a5" class="flex">
+      <a role="button" class="">
+        Git</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker-1/" class="">
+      Docker 概述</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker2/" class="">
+      Docker 镜像</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker3/" class="active">
+      Docker 容器</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ed5bdd985a7ce57aea7f541f44e05eca" class="toggle"  />
+    <label for="section-ed5bdd985a7ce57aea7f541f44e05eca" class="flex">
+      <a role="button" class="">
+        Git</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/git/Git/" class="">
+      Git</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <input type="checkbox" class="toggle" id="menu-control" />
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Docker 容器</h3>
+
+  
+  <input type="checkbox" class="toggle" id="toc-control" />
+  <label for="toc-control">
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+  </label>
+  
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#容器基础">容器基础</a></li>
+    <li><a href="#容器命令">容器命令</a></li>
+    <li><a href="#docker-system-命令集">docker system 命令集</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      <h1>Docker 容器</h1>
+
+
+<div class="page-meta" style="opacity: 0.65; font-size: 0.85em; margin: -0.5em 0 1.5em 0;">
+  作者 54deer
+   · 
+  日期 2026-10-04
+</div>
+
+      
+  <article class="markdown book-article"><h1 id="容器基础">容器基础<a class="anchor" href="#%e5%ae%b9%e5%99%a8%e5%9f%ba%e7%a1%80"></a></h1>
+<p>容器是镜像的运行时</p>
+<p>Docker 容器存在的意义就是为了运行容器中的应用，对外提供服务，所以启动容器的目的就是启动运行该容器中的应用。</p>
+<p>容器中的应用运行完毕后，容器就会自动终止。如果不想让容器启动后立即终止运行，则就需要使应用处于与<strong>交互状态或等待状态</strong></p>
+<p>容器启动过程：
+<img src="20261004100158.png" alt="" /></p>
+<h1 id="容器命令">容器命令<a class="anchor" href="#%e5%ae%b9%e5%99%a8%e5%91%bd%e4%bb%a4"></a></h1>
+<p>&lt; CONTAINER &gt; 与&lt; IMAGE &gt;可使用 name 或者 id</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 59
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 60
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 61
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 62
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 63
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 64
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 65
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 66
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 67
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 68
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 69
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 70
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 71
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 72
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 73
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 74
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 75
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 76
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 77
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 78
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 79
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 80
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 81
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 82
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 83
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 84
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 85
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 86
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 87
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 88
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 89
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 90
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 91
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 92
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 93
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 94
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 95
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 96
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 97
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 98
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 99
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">100
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">101
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">102
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">103
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">104
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">105
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">106
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">107
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">108
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">109
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">110
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">111
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">112
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 删除容器
+</span></span><span style="display:flex;"><span>docker rm <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>docker rm <span style="color:#ff79c6">$</span>(docker ps <span style="color:#ff79c6">-</span>aq) 
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>f     强制删除，包括运行中容器
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 启动容器
+</span></span><span style="display:flex;"><span>docker start <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 重启容器
+</span></span><span style="display:flex;"><span>docker restart <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 从镜像创建但不运行容器(不支持<span style="color:#ff79c6">-</span>d, <span style="color:#ff79c6">--</span>detach选项)
+</span></span><span style="display:flex;"><span>docker create <span style="color:#ff79c6">&lt;</span>IMAGE<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 从镜像创建并运行容器
+</span></span><span style="display:flex;"><span>docker run <span style="color:#ff79c6">&lt;</span>IMAGE<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>d, <span style="color:#ff79c6">--</span>detach                     后台运行（运行后不进入应用cmd）
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>e, <span style="color:#ff79c6">--</span>env list                   设置环境变量
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>env<span style="color:#ff79c6">-</span>file list                  从指定文件读取环境变量
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>p, <span style="color:#ff79c6">--</span>publish (h_port):(c_port)  端口映射（宿主机:容器）
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>P, <span style="color:#ff79c6">--</span>publish<span style="color:#ff79c6">-</span>all                随机映射可用端口 
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>name <span style="color:#ff79c6">&lt;</span>namae<span style="color:#ff79c6">&gt;</span>	                 给容器起名字
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>i                               保持stdin打开
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>t	                             分配一个伪终端
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>v	                             挂载目录<span style="color:#ff79c6">/</span>卷	
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>network	                     指定网络	
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>restart                        重启策略	
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>rm	                         退出后自动删除容器	
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>w                               容器内工作目录	
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>u	                             指定运行用户
+</span></span><span style="display:flex;"><span>docker run <span style="color:#ff79c6">-</span>d <span style="color:#ff79c6">--</span>name myredis1 <span style="color:#ff79c6">-</span>p <span style="color:#bd93f9">8888</span>:<span style="color:#bd93f9">6379</span> redis <span style="color:#ff79c6">//</span> 不创建交互终端，后台运行
+</span></span><span style="display:flex;"><span>docker run <span style="color:#ff79c6">-</span>it <span style="color:#ff79c6">--</span>name myredis1 <span style="color:#ff79c6">-</span>p <span style="color:#bd93f9">8888</span>:<span style="color:#bd93f9">6379</span> redis <span style="color:#ff79c6">//</span> 创建并进入交互终端
+</span></span><span style="display:flex;"><span>docker run <span style="color:#ff79c6">-</span>dit <span style="color:#ff79c6">--</span>name myredis1 <span style="color:#ff79c6">-</span>p <span style="color:#bd93f9">8888</span>:<span style="color:#bd93f9">6379</span> redis <span style="color:#ff79c6">//</span> 创建但不进入交互终端，后台运行
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 以新进程的方式进入运行中容器(需指定COMMAND,如reids<span style="color:#ff79c6">-</span>cli,一般带<span style="color:#ff79c6">-</span>it开启伪终端)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 使用exit只终止当前进程(如客户端进程)，不终止服务进程
+</span></span><span style="display:flex;"><span>docker exec <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&lt;</span>COMMAND<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>i                               保持stdin打开
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>t	                             分配一个伪终端
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>u	                             指定运行用户
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>d, <span style="color:#ff79c6">--</span>detach                     后台运行（运行后不进入应用cmd）
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>e, <span style="color:#ff79c6">--</span>env list                   设置环境变量
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>env<span style="color:#ff79c6">-</span>file list                  从指定文件读取环境变量
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>docker exec <span style="color:#ff79c6">-</span>it myredis1 redis<span style="color:#ff79c6">-</span>cli <span style="color:#ff79c6">//</span> 进入redis客户端交互终端
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 进入运行中容器当前的进程(exit退出会杀死容器，默认开启stdin，但能否使用取决于容器第一次run时是否指定<span style="color:#ff79c6">-</span>it,以及run命令使用的COMMAND是否支持交互)
+</span></span><span style="display:flex;"><span>docker attach <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 暂停容器对外服务
+</span></span><span style="display:flex;"><span>docker pause <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 解除暂停容器对外服务
+</span></span><span style="display:flex;"><span>docker unpause <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 退出不停止容器进程
+</span></span><span style="display:flex;"><span>Ctrl <span style="color:#ff79c6">+</span> P <span style="color:#ff79c6">+</span> Q
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 退出并停止容器进程
+</span></span><span style="display:flex;"><span>exit 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 优雅停止容器
+</span></span><span style="display:flex;"><span>docker stop <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>docker stop <span style="color:#ff79c6">$</span>(docker ps <span style="color:#ff79c6">-</span>aq) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 强制停止容器
+</span></span><span style="display:flex;"><span>docker kill <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">...</span>
+</span></span><span style="display:flex;"><span>docker stop <span style="color:#ff79c6">$</span>(docker ps <span style="color:#ff79c6">-</span>aq) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 查看容器
+</span></span><span style="display:flex;"><span>docker ps
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>a                     查看所有容器(up<span style="color:#ff79c6">/</span>create<span style="color:#ff79c6">/</span>exited)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>f, <span style="color:#ff79c6">--</span>filter filter    过滤结果
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>n, <span style="color:#ff79c6">--</span>last int         指定显示容器数(<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>是所有)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>l, <span style="color:#ff79c6">--</span>latest           显示最新的容器
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>q, <span style="color:#ff79c6">--</span>quiet            只显示容器ID
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>s, <span style="color:#ff79c6">--</span>size             显示占用空间大小
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>docker ps <span style="color:#ff79c6">-</span>aq <span style="color:#ff79c6">//</span> 查看所有容器ID
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 查看运行中容器的进程
+</span></span><span style="display:flex;"><span>docker top <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 查看容器的日志
+</span></span><span style="display:flex;"><span>docker logs <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>details          显示细节
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>since string     Show logs since timestam <span style="color:#ff79c6">or</span> relative
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>n                 显示日志数
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>until string     Show logs before a timestamp <span style="color:#ff79c6">or</span> relative
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>f, <span style="color:#ff79c6">--</span>follow       动态查看日志
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 容器与宿主机之间文件传递
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 容器<span style="color:#ff79c6">-&gt;</span>宿主机
+</span></span><span style="display:flex;"><span>docker cp [OPTIONS] CONTAINER:SRC_PATH  DEST_PATH
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 宿主机<span style="color:#ff79c6">-&gt;</span>容器
+</span></span><span style="display:flex;"><span>docker cp [OPTIONS] SRC_PATH  CONTAINER:DEST_PATH
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 容器打包为新镜像(以将一个容器文件系统的当前快照生成为一个新的镜像，[REPOSITORY[:TAG]]不指定为悬虚镜像)
+</span></span><span style="display:flex;"><span>docker commit <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span> [REPOSITORY[:TAG]]
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>a, <span style="color:#ff79c6">--</span>author string    Author
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>c, <span style="color:#ff79c6">--</span>change list      Apply Dockerfile to the created image
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>m, <span style="color:#ff79c6">--</span>message string   Commit message
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 导出容器(将一个容器的文件系统导出为 tar 镜像的文件)
+</span></span><span style="display:flex;"><span>docker <span style="color:#ff79c6">export</span> <span style="color:#ff79c6">&lt;</span>CONTAINER<span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">-</span>o, <span style="color:#ff79c6">--</span>output string   指定导出文件，否则stdout
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">//</span> 导出容器(将file<span style="color:#ff79c6">|</span>URL<span style="color:#ff79c6">|-</span>导入为一个镜像，[REPOSITORY[:TAG]]不指定为悬虚镜像)
+</span></span><span style="display:flex;"><span> docker import  file<span style="color:#ff79c6">|</span>URL<span style="color:#ff79c6">|-</span>  [REPOSITORY[:TAG]]
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>c, <span style="color:#ff79c6">--</span>change list       Apply Dockerfile to the created image
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>m, <span style="color:#ff79c6">--</span>message string   Commit message</span></span></code></pre></td></tr></table>
+</div>
+</div><p>docker commit，export 与 save三者的区分，import 与 load的区分：</p>
+<ul>
+<li><code>commit</code> 的产物是镜像（还在 Docker 里），<code>export</code>/<code>save</code> 的产物是文件（tar 包）</li>
+<li><code>export</code> 是扁平化的（单层），体积更小，但容器相关的元数据全丢</li>
+<li><code>save</code> 是分层的，完整保留，体积更大</li>
+</ul>
+<h1 id="docker-system-命令集">docker system 命令集<a class="anchor" href="#docker-system-%e5%91%bd%e4%bb%a4%e9%9b%86"></a></h1>
+<ul>
+<li>作用：管理docker</li>
+<li>用法:  docker system COMMAND</li>
+</ul>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Commands:
+</span></span><span style="display:flex;"><span>  df          Show docker disk usage
+</span></span><span style="display:flex;"><span>  events      Get real time events from the server
+</span></span><span style="display:flex;"><span>  info        Display system-wide information
+</span></span><span style="display:flex;"><span>  prune       Remove unused data
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>// 查看磁盘占用率
+</span></span><span style="display:flex;"><span>docker system df
+</span></span><span style="display:flex;"><span>-v    详细的占用情况 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 查看在 docker 上所发生的所有事件/命令
+</span></span><span style="display:flex;"><span>docker system events == docker events
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 查看dockerClient与 docker Server 等的详情信息
+</span></span><span style="display:flex;"><span>docker system info == docker info
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 删除 docker 中的无用数据，已经停止的容器、没有任何连接容器的网络、悬空镜像及其构建缓存
+</span></span><span style="display:flex;"><span>docker system prune</span></span></code></pre></td></tr></table>
+</div>
+</div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+  <a class="flex align-center" href="https://54deer.github.io/edit/main/content/content/docs/Docker/Docker3.md" target="_blank" rel="noopener edit">
+    <img src="/icons/edit.svg" class="book-icon" alt="Edit" />
+    <span>编辑本页</span>
+  </a>
+
+</div>
+
+</div>
+
+<div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/Docker/Docker2/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Docker 镜像</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/git/Git/" class="flex align-center">
+        <span>Git</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay" aria-hidden="true"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#容器基础">容器基础</a></li>
+    <li><a href="#容器命令">容器命令</a></li>
+    <li><a href="#docker-system-命令集">docker system 命令集</a></li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

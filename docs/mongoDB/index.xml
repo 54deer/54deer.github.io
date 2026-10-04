@@ -12,11 +12,18 @@
 		
 			<atom:link href="https://54deer.github.io/docs/mongoDB/index.xml" rel="self" type="application/rss+xml" />
 			<item>
-				<title>mongoDB 概述</title>
-				<link>https://54deer.github.io/docs/mongoDB/mongoDB/</link>
+				<title>mongoDB 基础知识</title>
+				<link>https://54deer.github.io/docs/mongoDB/1/</link>
 				<pubDate>Thu, 01 Oct 2026 00:00:00 +0800</pubDate>
-				<guid>https://54deer.github.io/docs/mongoDB/mongoDB/</guid>
-				<description>&lt;h1 id=&#34;&#34;&gt;&lt;a class=&#34;anchor&#34; href=&#34;#&#34;&gt;&lt;/a&gt;&lt;/h1&gt;</description>
+				<guid>https://54deer.github.io/docs/mongoDB/1/</guid>
+				<description>&lt;h1 id=&#34;简介&#34;&gt;简介&lt;a class=&#34;anchor&#34; href=&#34;#%e7%ae%80%e4%bb%8b&#34;&gt;&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;p&gt;MongoDB是&lt;strong&gt;文档数据库&lt;/strong&gt;（&lt;strong&gt;面向文档&lt;/strong&gt;的可操作数据库），是作为现代应用程序关系数据库的替代方案而全新构建的。与关系数据库不同， MongoDB允许开发者存储丰富的类似JSON的文档&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>mongosh CURD操作</title>
+				<link>https://54deer.github.io/docs/mongoDB/2/</link>
+				<pubDate>Fri, 02 Oct 2026 00:00:00 +0800</pubDate>
+				<guid>https://54deer.github.io/docs/mongoDB/2/</guid>
+				<description>&lt;blockquote class=&#39;book-hint &#39;&gt;&#xA;&lt;p&gt;db.collection.function()是方法链，db指数据库对象（当前数据库，不需改动），collection指该库下的集合对象(需指定)，.function()指集合的方法&lt;/p&gt;&#xA;&lt;/blockquote&gt;</description>
 			</item>
 	</channel>
 </rss>
