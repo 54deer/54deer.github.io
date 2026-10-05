@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr" data-theme="auto">
+<head>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="对于任何在docker使用的服务器要注意数据/配置持久化的问题
+MySQL 问题0：版本选择 8.0 已于 2026 年 4 月停止支持（最后版本 8.0.46），但不代表不能使用 8.4 LTS完整支持到 2029 年 4 月，扩展安全支持到 2032 年 4 月 选择8.2.10为镜像运行容器，注意8.4许多参数、配置、插件和8.0大不相同
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://54deer.github.io/docs/Docker/docker7/">
+	<meta property="og:site_name" content="54deer の BLOG">
+	<meta property="og:title" content="Docker  常用服务器安装">
+	<meta property="og:description" content="对于任何在docker使用的服务器要注意数据/配置持久化的问题
+MySQL 问题0：版本选择 8.0 已于 2026 年 4 月停止支持（最后版本 8.0.46），但不代表不能使用 8.4 LTS完整支持到 2029 年 4 月，扩展安全支持到 2032 年 4 月 选择8.2.10为镜像运行容器，注意8.4许多参数、配置、插件和8.0大不相同">
+	<meta property="og:locale" content="zh">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="docs">
+		<meta property="article:published_time" content="2026-10-05T00:00:00+08:00">
+		<meta property="article:modified_time" content="2026-10-06T01:03:04+08:00">
+
+
+	<meta itemprop="name" content="Docker  常用服务器安装">
+	<meta itemprop="description" content="对于任何在docker使用的服务器要注意数据/配置持久化的问题
+MySQL 问题0：版本选择 8.0 已于 2026 年 4 月停止支持（最后版本 8.0.46），但不代表不能使用 8.4 LTS完整支持到 2029 年 4 月，扩展安全支持到 2032 年 4 月 选择8.2.10为镜像运行容器，注意8.4许多参数、配置、插件和8.0大不相同">
+	<meta itemprop="datePublished" content="2026-10-05T00:00:00+08:00">
+	<meta itemprop="dateModified" content="2026-10-06T01:03:04+08:00">
+	<meta itemprop="wordCount" content="2962">
+
+<title>Docker  常用服务器安装 • 54deer の BLOG</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="https://54deer.github.io/docs/Docker/docker7/">
+<link rel="stylesheet" href="/book.min.a02ac497c6d6e5c0a81db7ed78d24326ef87e617cb865bebfbe4d1a1d6ee6573.css" integrity="sha256-oCrEl8bW5cCoHbfteNJDJu&#43;H5hfLhlvr&#43;&#43;TRodbuZXM=" crossorigin="anonymous">
+
+
+<script type="module" src="/zh.search.min.e888b2a5c379908a7ff73ce94a93e133a23069d30aa5df683ab93e6290cdecfb.js" integrity="sha256-6IiypcN5kIp/9zzpSpPhM6IwadMKpd9oOrk&#43;YpDN7Ps=" crossorigin="anonymous"></script>
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>54deer の BLOG</span>
+  </a>
+</h2>
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text"
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+<ul><li><a href="/">🏠 About Me</a></li><li><a href="https://github.com/54deer" target="_blank" rel="noopener">🔗 GitHub</a></li></ul>
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-9e24d28b120804ba6357f6fbea8c5d7d" class="toggle"  />
+    <label for="section-9e24d28b120804ba6357f6fbea8c5d7d" class="flex">
+      <a role="button" class="">
+        Golang</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-81b3b35a677bb5efb846d979849ae55f" class="toggle"  />
+    <label for="section-81b3b35a677bb5efb846d979849ae55f" class="flex">
+      <a role="button" class="">
+        GO 标准库</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-7932a59f0acc34d9eb509b606d8c3e7f" class="toggle"  />
+    <label for="section-7932a59f0acc34d9eb509b606d8c3e7f" class="flex">
+      <a role="button" class="">
+        GO 三方库</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-af6c0eda4d2cdd556cc66540bdce0b76" class="toggle"  />
+    <label for="section-af6c0eda4d2cdd556cc66540bdce0b76" class="flex">
+      <a role="button" class="">
+        pgSQL&amp;MySQL</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-fa7c9692409e20f1f52ebe77c4c5e801" class="toggle"  />
+    <label for="section-fa7c9692409e20f1f52ebe77c4c5e801" class="flex">
+      <a role="button" class="">
+        SQL&amp;GORM</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-a7abf702dde8fdc025b82feea1d6ba03" class="toggle"  />
+    <label for="section-a7abf702dde8fdc025b82feea1d6ba03" class="flex">
+      <a role="button" class="">
+        Redis</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-2b000412833c87b0e53129bd1d6feab9" class="toggle"  />
+    <label for="section-2b000412833c87b0e53129bd1d6feab9" class="flex">
+      <a role="button" class="">
+        RabbitMQ</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="toggle"  />
+    <label for="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="flex">
+      <a role="button" class="">
+        mongoDB</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/mongoDB/1/" class="">
+      mongoDB 基础知识</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/mongoDB/2/" class="">
+      mongosh CURD操作</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-4a86b6f03b2baaea23efad445fdd13a5" class="toggle" checked />
+    <label for="section-4a86b6f03b2baaea23efad445fdd13a5" class="flex">
+      <a role="button" class="">
+        docker</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker1/" class="">
+      Docker 概述</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker2/" class="">
+      Docker 镜像</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker3/" class="">
+      Docker 容器</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker4/" class="">
+      Dockerfile</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker5/" class="">
+      Docker 数据持久化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker6/" class="">
+      Docker 网络架构</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker7/" class="active">
+      Docker  常用服务器安装</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ed5bdd985a7ce57aea7f541f44e05eca" class="toggle"  />
+    <label for="section-ed5bdd985a7ce57aea7f541f44e05eca" class="flex">
+      <a role="button" class="">
+        Git</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/git/Git/" class="">
+      Git</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <input type="checkbox" class="toggle" id="menu-control" />
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Docker  常用服务器安装</h3>
+
+  
+  <input type="checkbox" class="toggle" id="toc-control" />
+  <label for="toc-control">
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+  </label>
+  
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#mysql">MySQL</a>
+      <ul>
+        <li><a href="#问题0版本选择">问题0：版本选择</a></li>
+        <li><a href="#问题1配置设置">问题1：配置设置</a></li>
+        <li><a href="#问题2持久化数据问题">问题2：持久化数据问题</a></li>
+        <li><a href="#单机版部署">单机版部署</a></li>
+        <li><a href="#主从版部署">主从版部署</a>
+          <ul>
+            <li><a href="#主节点">主节点</a></li>
+            <li><a href="#从节点">从节点</a></li>
+            <li><a href="#主从效果展示">主从效果展示</a></li>
+          </ul>
+        </li>
+        <li><a href="#现象踩坑总结">现象/踩坑总结</a></li>
+      </ul>
+    </li>
+    <li><a href="#redis">redis</a>
+      <ul>
+        <li><a href="#单机版部署-1">单机版部署</a></li>
+        <li><a href="#一主二从三哨兵部署">一主二从三哨兵部署</a></li>
+        <li><a href="#分布式插槽1主2从--n--哨兵集群">分布式插槽（1主2从 * n + 哨兵集群）</a></li>
+        <li><a href="#redis配置文件模板">redis配置文件模板</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      <h1>Docker  常用服务器安装</h1>
+
+
+<div class="page-meta" style="opacity: 0.65; font-size: 0.85em; margin: -0.5em 0 1.5em 0;">
+  作者 54deer
+   · 
+  日期 2026-10-05
+</div>
+
+      
+  <article class="markdown book-article"><p>对于任何在docker使用的服务器要注意<strong>数据/配置持久化</strong>的问题</p>
+<h1 id="mysql">MySQL<a class="anchor" href="#mysql"></a></h1>
+<h2 id="问题0版本选择">问题0：版本选择<a class="anchor" href="#%e9%97%ae%e9%a2%980%e7%89%88%e6%9c%ac%e9%80%89%e6%8b%a9"></a></h2>
+<ul>
+<li><strong>8.0 已于 2026 年 4 月停止支持</strong>（最后版本 8.0.46），但不代表不能使用</li>
+<li><strong>8.4 LTS完整支持到 2029 年 4 月</strong>，扩展安全支持到 2032 年 4 月</li>
+</ul>
+<p>选择8.2.10为镜像运行容器，<strong>注意8.4许多参数、配置、插件和8.0大不相同</strong></p>
+<h2 id="问题1配置设置">问题1：配置设置<a class="anchor" href="#%e9%97%ae%e9%a2%981%e9%85%8d%e7%bd%ae%e8%ae%be%e7%bd%ae"></a></h2>
+<p>配置文件在容器路径<code>/etc/mysql/conf.d/my.cnf</code></p>
+<p>8.4的存储层<code> server</code>，<code>database </code>默认字符集已经是 <code>utf8mb4</code><br>
+<code>character_set_client</code> / <code>connection</code> / <code>results</code> 是 <code>latin1</code>可能需要修改</p>
+<p><img src="../20261005155616.png" alt="" /></p>
+<p>排序</p>
+<p><img src="../20261005155627.png" alt="" /></p>
+<p>时区</p>
+<p><img src="../20261005164139.png" alt="" /></p>
+<p>慢查询日志</p>
+<h2 id="问题2持久化数据问题">问题2：持久化数据问题<a class="anchor" href="#%e9%97%ae%e9%a2%982%e6%8c%81%e4%b9%85%e5%8c%96%e6%95%b0%e6%8d%ae%e9%97%ae%e9%a2%98"></a></h2>
+<p>容器出现异常或者被删除时可以通过镜像再次run，但是之前的数据全部丢失</p>
+<p>MySQL 官方镜像把数据/慢查询日志放容器目录 <strong><code>/var/lib/mysql</code></strong></p>
+<p><img src="../20261005160856.png" alt="" /></p>
+<h2 id="单机版部署">单机版部署<a class="anchor" href="#%e5%8d%95%e6%9c%ba%e7%89%88%e9%83%a8%e7%bd%b2"></a></h2>
+<ul>
+<li>挂载配置（字符集、时区、排序、慢查询日志配置）</li>
+<li>挂载库表日志数据</li>
+</ul>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#ff79c6">------------</span>my<span style="color:#ff79c6">.</span>cnf<span style="color:#ff79c6">--------------</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[mysqld]
+</span></span><span style="display:flex;"><span>character<span style="color:#ff79c6">-</span>set<span style="color:#ff79c6">-</span>server<span style="color:#ff79c6">=</span>utf8mb4   <span style="color:#6272a4">#字符集</span>
+</span></span><span style="display:flex;"><span>collation<span style="color:#ff79c6">-</span>server<span style="color:#ff79c6">=</span>utf8mb4_0900_ai_ci  <span style="color:#6272a4">#排序</span>
+</span></span><span style="display:flex;"><span>slow_query_log <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>           <span style="color:#6272a4">#慢查询日志</span>
+</span></span><span style="display:flex;"><span>long_query_time <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>          <span style="color:#6272a4">#慢查询阈值</span>
+</span></span><span style="display:flex;"><span>log_output <span style="color:#ff79c6">=</span> FILE            <span style="color:#6272a4">#输出 （默认/var/lib/mysql/容器id-slow.log）</span>
+</span></span><span style="display:flex;"><span>default<span style="color:#ff79c6">-</span>time<span style="color:#ff79c6">-</span>zone <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;+08:00&#39;</span> <span style="color:#6272a4">#时区</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[client]
+</span></span><span style="display:flex;"><span>default<span style="color:#ff79c6">-</span>character<span style="color:#ff79c6">-</span>set<span style="color:#ff79c6">=</span>utf8mb4 <span style="color:#6272a4">#字符集</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[mysql]
+</span></span><span style="display:flex;"><span>default<span style="color:#ff79c6">-</span>character<span style="color:#ff79c6">-</span>set<span style="color:#ff79c6">=</span>utf8mb4 <span style="color:#6272a4">#字符集</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#6272a4">##  拉取长期支持版</span>
+</span></span><span style="display:flex;"><span>docker pull mysql:<span style="color:#bd93f9">8.4</span><span style="color:#ff79c6">.</span><span style="color:#bd93f9">11</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">##  运行容器</span>
+</span></span><span style="display:flex;"><span>docker run \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>dp <span style="color:#bd93f9">3306</span>:<span style="color:#bd93f9">3306</span> \                                                        <span style="color:#6272a4"># 端口映射</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>name mysql<span style="color:#ff79c6">-</span>single \                                                  <span style="color:#6272a4"># 命名</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>e MYSQL_ROOT_PASSWORD<span style="color:#ff79c6">=</span><span style="color:#bd93f9">3306</span> \                                          <span style="color:#6272a4"># 设置密码</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>v <span style="color:#ff79c6">/</span>home<span style="color:#ff79c6">/</span>admin<span style="color:#ff79c6">/</span>docker<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>single<span style="color:#ff79c6">/</span>data<span style="color:#ff79c6">/</span>:<span style="color:#ff79c6">/</span><span style="color:#ff79c6">var</span><span style="color:#ff79c6">/</span>lib<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span> \             <span style="color:#6272a4"># 挂载库表日志数据目录</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>v <span style="color:#ff79c6">/</span>home<span style="color:#ff79c6">/</span>admin<span style="color:#ff79c6">/</span>docker<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>single<span style="color:#ff79c6">/</span>my<span style="color:#ff79c6">.</span>cnf:<span style="color:#ff79c6">/</span>etc<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>conf<span style="color:#ff79c6">.</span>d<span style="color:#ff79c6">/</span>my<span style="color:#ff79c6">.</span>cnf:ro \ <span style="color:#6272a4"># 挂载配置文件</span>
+</span></span><span style="display:flex;"><span>mysql:<span style="color:#bd93f9">8.4</span><span style="color:#ff79c6">.</span><span style="color:#bd93f9">11</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>复制运行版
+</span></span><span style="display:flex;"><span>docker run \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>dp <span style="color:#bd93f9">3306</span>:<span style="color:#bd93f9">3306</span> \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>name mysql<span style="color:#ff79c6">-</span>single \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>e MYSQL_ROOT_PASSWORD<span style="color:#ff79c6">=</span><span style="color:#bd93f9">3306</span> \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>v <span style="color:#ff79c6">/</span>home<span style="color:#ff79c6">/</span>admin<span style="color:#ff79c6">/</span>docker<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>single<span style="color:#ff79c6">/</span>data<span style="color:#ff79c6">/</span>:<span style="color:#ff79c6">/</span><span style="color:#ff79c6">var</span><span style="color:#ff79c6">/</span>lib<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span> \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>v <span style="color:#ff79c6">/</span>home<span style="color:#ff79c6">/</span>admin<span style="color:#ff79c6">/</span>docker<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>single<span style="color:#ff79c6">/</span>my<span style="color:#ff79c6">.</span>cnf:<span style="color:#ff79c6">/</span>etc<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>conf<span style="color:#ff79c6">.</span>d<span style="color:#ff79c6">/</span>my<span style="color:#ff79c6">.</span>cnf:ro \
+</span></span><span style="display:flex;"><span>mysql:<span style="color:#bd93f9">8.4</span><span style="color:#ff79c6">.</span><span style="color:#bd93f9">11</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="主从版部署">主从版部署<a class="anchor" href="#%e4%b8%bb%e4%bb%8e%e7%89%88%e9%83%a8%e7%bd%b2"></a></h2>
+<p>要使用容器名作IP不能使用默认网络</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>docker network create -d bridge mysql-cluster </span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="主节点">主节点<a class="anchor" href="#%e4%b8%bb%e8%8a%82%e7%82%b9"></a></h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#ff79c6">------------</span>my<span style="color:#ff79c6">.</span>cnf<span style="color:#ff79c6">--------------</span>
+</span></span><span style="display:flex;"><span>[client]
+</span></span><span style="display:flex;"><span>default<span style="color:#ff79c6">-</span>character<span style="color:#ff79c6">-</span>set<span style="color:#ff79c6">=</span>utf8mb4 <span style="color:#6272a4">#字符集</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[mysql]
+</span></span><span style="display:flex;"><span>default<span style="color:#ff79c6">-</span>character<span style="color:#ff79c6">-</span>set<span style="color:#ff79c6">=</span>utf8mb4 <span style="color:#6272a4">#字符集</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[mysqld]
+</span></span><span style="display:flex;"><span>character<span style="color:#ff79c6">-</span>set<span style="color:#ff79c6">-</span>server<span style="color:#ff79c6">=</span>utf8mb4   <span style="color:#6272a4">#字符集</span>
+</span></span><span style="display:flex;"><span>collation<span style="color:#ff79c6">-</span>server<span style="color:#ff79c6">=</span>utf8mb4_0900_ai_ci  <span style="color:#6272a4">#排序</span>
+</span></span><span style="display:flex;"><span>slow_query_log <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>           <span style="color:#6272a4">#慢查询日志</span>
+</span></span><span style="display:flex;"><span>long_query_time <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>          <span style="color:#6272a4">#慢查询阈值</span>
+</span></span><span style="display:flex;"><span>log_output <span style="color:#ff79c6">=</span> FILE            <span style="color:#6272a4">#输出 （默认/var/lib/mysql/容器id-slow.log）</span>
+</span></span><span style="display:flex;"><span>default<span style="color:#ff79c6">-</span>time<span style="color:#ff79c6">-</span>zone <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;+08:00&#39;</span> <span style="color:#6272a4">#时区</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 主从配置</span>
+</span></span><span style="display:flex;"><span>server_id<span style="color:#ff79c6">=</span><span style="color:#bd93f9">01</span>
+</span></span><span style="display:flex;"><span>binlog<span style="color:#ff79c6">-</span>ignore<span style="color:#ff79c6">-</span>db<span style="color:#ff79c6">=</span>mysql
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">log</span><span style="color:#ff79c6">-</span>bin<span style="color:#ff79c6">=</span>master<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">log</span><span style="color:#ff79c6">-</span>bin
+</span></span><span style="display:flex;"><span>binlog_cache_size<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>M
+</span></span><span style="display:flex;"><span>binlog_format<span style="color:#ff79c6">=</span>mixed
+</span></span><span style="display:flex;"><span>binlog_expire_logs_seconds <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">604800</span>
+</span></span><span style="display:flex;"><span>slave_skip_errors<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1062</span>
+</span></span><span style="display:flex;"><span>gtid_mode <span style="color:#ff79c6">=</span> ON
+</span></span><span style="display:flex;"><span>enforce_gtid_consistency <span style="color:#ff79c6">=</span> ON
+</span></span><span style="display:flex;"><span>log_slave_updates <span style="color:#ff79c6">=</span> ON</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>docker run \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>dp <span style="color:#bd93f9">3307</span>:<span style="color:#bd93f9">3306</span> \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>network mysql<span style="color:#ff79c6">-</span>cluster \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>name mysql<span style="color:#ff79c6">-</span>master \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>e MYSQL_ROOT_PASSWORD<span style="color:#ff79c6">=</span><span style="color:#bd93f9">3307</span> \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>v <span style="color:#ff79c6">/</span>home<span style="color:#ff79c6">/</span>admin<span style="color:#ff79c6">/</span>docker<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>cluster<span style="color:#ff79c6">/</span>master<span style="color:#ff79c6">/</span>data<span style="color:#ff79c6">/</span>:<span style="color:#ff79c6">/</span><span style="color:#ff79c6">var</span><span style="color:#ff79c6">/</span>lib<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span> \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>v <span style="color:#ff79c6">/</span>home<span style="color:#ff79c6">/</span>admin<span style="color:#ff79c6">/</span>docker<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>cluster<span style="color:#ff79c6">/</span>master<span style="color:#ff79c6">/</span>my<span style="color:#ff79c6">.</span>cnf:<span style="color:#ff79c6">/</span>etc<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>conf<span style="color:#ff79c6">.</span>d<span style="color:#ff79c6">/</span>my<span style="color:#ff79c6">.</span>cnf:ro \
+</span></span><span style="display:flex;"><span>mysql:<span style="color:#bd93f9">8.4</span><span style="color:#ff79c6">.</span><span style="color:#bd93f9">11</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>进入容器创建从节点用户并授权（会持久化到数据卷）</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>docker exec -it mysql-master mysql -uroot -p3307 -e &#34;
+</span></span><span style="display:flex;"><span>CREATE USER IF NOT EXISTS &#39;slave&#39;@&#39;%&#39; IDENTIFIED  BY &#39;3308&#39;;
+</span></span><span style="display:flex;"><span>GRANT REPLICATION SLAVE ON *.* TO &#39;slave&#39;@&#39;%&#39;;&#34;</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="从节点">从节点<a class="anchor" href="#%e4%bb%8e%e8%8a%82%e7%82%b9"></a></h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#6272a4"># ------------my.cnf--------------</span>
+</span></span><span style="display:flex;"><span>[client]
+</span></span><span style="display:flex;"><span>default<span style="color:#ff79c6">-</span>character<span style="color:#ff79c6">-</span>set<span style="color:#ff79c6">=</span>utf8mb4 <span style="color:#6272a4">#字符集</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[mysql]
+</span></span><span style="display:flex;"><span>default<span style="color:#ff79c6">-</span>character<span style="color:#ff79c6">-</span>set<span style="color:#ff79c6">=</span>utf8mb4 <span style="color:#6272a4">#字符集</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[mysqld]
+</span></span><span style="display:flex;"><span>character<span style="color:#ff79c6">-</span>set<span style="color:#ff79c6">-</span>server<span style="color:#ff79c6">=</span>utf8mb4   <span style="color:#6272a4">#字符集</span>
+</span></span><span style="display:flex;"><span>collation<span style="color:#ff79c6">-</span>server<span style="color:#ff79c6">=</span>utf8mb4_0900_ai_ci  <span style="color:#6272a4">#排序</span>
+</span></span><span style="display:flex;"><span>slow_query_log <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>           <span style="color:#6272a4">#慢查询日志</span>
+</span></span><span style="display:flex;"><span>long_query_time <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>          <span style="color:#6272a4">#慢查询阈值</span>
+</span></span><span style="display:flex;"><span>log_output <span style="color:#ff79c6">=</span> FILE            <span style="color:#6272a4">#输出 （默认/var/lib/mysql/容器id-slow.log）</span>
+</span></span><span style="display:flex;"><span>default<span style="color:#ff79c6">-</span>time<span style="color:#ff79c6">-</span>zone <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;+08:00&#39;</span> <span style="color:#6272a4">#时区</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 主从配置</span>
+</span></span><span style="display:flex;"><span>server_id<span style="color:#ff79c6">=</span><span style="color:#bd93f9">02</span>
+</span></span><span style="display:flex;"><span>binlog<span style="color:#ff79c6">-</span>ignore<span style="color:#ff79c6">-</span>db<span style="color:#ff79c6">=</span>mysql
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">log</span><span style="color:#ff79c6">-</span>bin<span style="color:#ff79c6">=</span>slave<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">log</span><span style="color:#ff79c6">-</span>bin
+</span></span><span style="display:flex;"><span>binlog_cache_size<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>M
+</span></span><span style="display:flex;"><span>binlog_format<span style="color:#ff79c6">=</span>mixed
+</span></span><span style="display:flex;"><span>binlog_expire_logs_seconds <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">604800</span>
+</span></span><span style="display:flex;"><span>slave_skip_errors<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1062</span>
+</span></span><span style="display:flex;"><span>gtid_mode <span style="color:#ff79c6">=</span> ON
+</span></span><span style="display:flex;"><span>enforce_gtid_consistency <span style="color:#ff79c6">=</span> ON
+</span></span><span style="display:flex;"><span>log_slave_updates <span style="color:#ff79c6">=</span> ON
+</span></span><span style="display:flex;"><span>relay_log<span style="color:#ff79c6">=</span>relay<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">log</span><span style="color:#ff79c6">-</span>bin
+</span></span><span style="display:flex;"><span>read_only<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>docker run \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>dp <span style="color:#bd93f9">3308</span>:<span style="color:#bd93f9">3306</span> \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>name mysql<span style="color:#ff79c6">-</span>slave \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">--</span>network mysql<span style="color:#ff79c6">-</span>cluster \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>e MYSQL_ROOT_PASSWORD<span style="color:#ff79c6">=</span><span style="color:#bd93f9">3308</span> \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>v <span style="color:#ff79c6">/</span>home<span style="color:#ff79c6">/</span>admin<span style="color:#ff79c6">/</span>docker<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>cluster<span style="color:#ff79c6">/</span>slave<span style="color:#ff79c6">/</span>data<span style="color:#ff79c6">/</span>:<span style="color:#ff79c6">/</span><span style="color:#ff79c6">var</span><span style="color:#ff79c6">/</span>lib<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span> \
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">-</span>v <span style="color:#ff79c6">/</span>home<span style="color:#ff79c6">/</span>admin<span style="color:#ff79c6">/</span>docker<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>cluster<span style="color:#ff79c6">/</span>slave<span style="color:#ff79c6">/</span>my<span style="color:#ff79c6">.</span>cnf:<span style="color:#ff79c6">/</span>etc<span style="color:#ff79c6">/</span>mysql<span style="color:#ff79c6">/</span>conf<span style="color:#ff79c6">.</span>d<span style="color:#ff79c6">/</span>my<span style="color:#ff79c6">.</span>cnf:ro \
+</span></span><span style="display:flex;"><span>mysql:<span style="color:#bd93f9">8.4</span><span style="color:#ff79c6">.</span><span style="color:#bd93f9">11</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>进入容器指定主节点（会持久化到数据卷）</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>docker exec -it mysql-slave mysql   -uroot -p3308 -e &#34;
+</span></span><span style="display:flex;"><span>CHANGE REPLICATION SOURCE TO
+</span></span><span style="display:flex;"><span>  SOURCE_HOST=&#39;mysql-master&#39;,
+</span></span><span style="display:flex;"><span>  SOURCE_PORT=3306,
+</span></span><span style="display:flex;"><span>  SOURCE_USER=&#39;slave&#39;,
+</span></span><span style="display:flex;"><span>  SOURCE_PASSWORD=&#39;3308&#39;,
+</span></span><span style="display:flex;"><span>  SOURCE_AUTO_POSITION=1,
+</span></span><span style="display:flex;"><span>  GET_SOURCE_PUBLIC_KEY=1;
+</span></span><span style="display:flex;"><span>START REPLICA;&#34;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 查看同步线程是否启动
+</span></span><span style="display:flex;"><span>docker exec -it mysql-slave mysql   -uroot -p3308 -e &#34;show replica status \G&#34;</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="主从效果展示">主从效果展示<a class="anchor" href="#%e4%b8%bb%e4%bb%8e%e6%95%88%e6%9e%9c%e5%b1%95%e7%a4%ba"></a></h3>
+<ol>
+<li>从节点replica_io同步线程成功开启</li>
+</ol>
+<p><img src="../20261005213311.png" alt="" /></p>
+<ol start="2">
+<li>从windows powershell连接wsl docker中的mysql并插入</li>
+</ol>
+<p><img src="../20261005213910.png" alt="" /></p>
+<ol start="3">
+<li>从mysql主节点和从节点容器查看同步效果</li>
+</ol>
+<p><img src="../20261005214156.png" alt="" /></p>
+<p><img src="../20261005214318.png" alt="" /></p>
+<h2 id="现象踩坑总结">现象/踩坑总结<a class="anchor" href="#%e7%8e%b0%e8%b1%a1%e8%b8%a9%e5%9d%91%e6%80%bb%e7%bb%93"></a></h2>
+<table>
+	<thead>
+			<tr>
+					<th>#</th>
+					<th>现象/报错</th>
+					<th>原因</th>
+					<th>解决</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>1</td>
+					<td><code>unknown variable 'expire_logs_days'</code> 启动中止</td>
+					<td>8.4 删除该参数</td>
+					<td>改用 <code>binlog_expire_logs_seconds=604800</code></td>
+			</tr>
+			<tr>
+					<td>2</td>
+					<td><code>slave_skip_errors</code>/<code>log_slave_updates</code> 废弃警告</td>
+					<td>8.4 术语更名</td>
+					<td>改用 <code>replica_skip_errors</code>/<code>log_replica_updates</code></td>
+			</tr>
+			<tr>
+					<td>3</td>
+					<td><code>Table 'mysql.user' doesn't exist</code></td>
+					<td>数据目录残留半初始化文件</td>
+					<td><code>sudo rm -rf data</code> 清空重建</td>
+			</tr>
+			<tr>
+					<td>4</td>
+					<td><code>rm: Permission denied</code></td>
+					<td>文件属主是容器 mysql 用户</td>
+					<td>加 <code>sudo</code> 或用 alpine 容器删除</td>
+			</tr>
+			<tr>
+					<td>5</td>
+					<td><code>ERROR 1410 not allowed to create a user with GRANT</code></td>
+					<td>建的是 <code>slaver</code> 授权给 <code>slave</code>，8.0+ 禁止隐式建用户</td>
+					<td>CREATE USER 与 GRANT 用户名保持一致</td>
+			</tr>
+			<tr>
+					<td>6</td>
+					<td><code>ERROR 1064</code> 语法错误</td>
+					<td>8.4 删除 <code>CHANGE MASTER TO</code> 等旧命令</td>
+					<td>改用 <code>CHANGE REPLICATION SOURCE TO</code> / <code>START REPLICA</code> / <code>SHOW REPLICA STATUS</code></td>
+			</tr>
+			<tr>
+					<td>7</td>
+					<td><code>ERROR 2005 Unknown MySQL server host 'mysql-master'</code></td>
+					<td>默认 bridge 网络不支持容器名解析</td>
+					<td>自建网络 <code>--network mysql-cluster</code></td>
+			</tr>
+			<tr>
+					<td>8</td>
+					<td>从库连不上主库</td>
+					<td>误用宿主机映射端口 3307</td>
+					<td>容器间用内部端口 3306</td>
+			</tr>
+			<tr>
+					<td>9</td>
+					<td><code>Authentication requires secure connection</code></td>
+					<td>8.0+ 默认 caching_sha2_password 拒绝明文</td>
+					<td>加 <code>GET_SOURCE_PUBLIC_KEY=1</code> 或改认证插件</td>
+			</tr>
+			<tr>
+					<td>10</td>
+					<td><code>ERROR 1524 Plugin 'mysql_native_password' is not loaded</code></td>
+					<td>8.4 默认不加载该插件</td>
+					<td>主库配置加 <code>mysql_native_password=ON</code>，或直接用坑 9</td>
+			</tr>
+			<tr>
+					<td>11</td>
+					<td>重建容器后复制自动恢复主从连接</td>
+					<td>复制配置存在数据卷中</td>
+					<td><code>RESET REPLICA ALL</code> 可清除</td>
+			</tr>
+	</tbody>
+</table>
+<h1 id="redis">redis<a class="anchor" href="#redis"></a></h1>
+<table>
+	<thead>
+			<tr>
+					<th style="text-align: left">版本</th>
+					<th style="text-align: left">类型</th>
+					<th style="text-align: left">EOL</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">8.10 / 8.8 / 8.6 / 8.4</td>
+					<td style="text-align: left">标准版（发布后约 6 个月 + 半年缓冲）</td>
+					<td style="text-align: left">较短，随新版发布逐步停止</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>8.2</strong></td>
+					<td style="text-align: left"><strong>扩展版</strong></td>
+					<td style="text-align: left"><strong>2030-09-01</strong></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">8.0</td>
+					<td style="text-align: left">标准版</td>
+					<td style="text-align: left">2026-12-01</td>
+			</tr>
+			<tr>
+					<td style="text-align: left"><strong>选择8.2.10为镜像运行容器</strong></td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
+</table>
+<p>容器内配置文件路径        /etc/redis/redis.conf  （ 随意指定容器里默认没有配置文件，运行时指定该路径 ）
+容器内持久化数据文件路径    /data                                （ 通过配置文件指定 ）</p>
+<h2 id="单机版部署-1">单机版部署<a class="anchor" href="#%e5%8d%95%e6%9c%ba%e7%89%88%e9%83%a8%e7%bd%b2-1"></a></h2>
+<p>使用redis配置文件模板</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>docker run \
+</span></span><span style="display:flex;"><span>--name redis-single \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/single/redis.conf:/etc/redis/redis.conf \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/single/data:/data \
+</span></span><span style="display:flex;"><span>-dp 6379:6379 \
+</span></span><span style="display:flex;"><span>redis:8.2.10 \
+</span></span><span style="display:flex;"><span>redis-server /etc/redis/redis.conf  #以指定配置文件运行</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="一主二从三哨兵部署">一主二从三哨兵部署<a class="anchor" href="#%e4%b8%80%e4%b8%bb%e4%ba%8c%e4%bb%8e%e4%b8%89%e5%93%a8%e5%85%b5%e9%83%a8%e7%bd%b2"></a></h2>
+<p>复制三份配置文件，只需主节点开启持久化即可</p>
+<p><img src="../20261005230707.png" alt="" /></p>
+<p>主从节点在redis配置文件模板追加</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>slave-announce-ip  172.30.0.10    # docker宿主机ip(如果是wsl/虚拟机建议固定) / 实际服务器ip  
+</span></span><span style="display:flex;"><span>slave-announce-port 6380/6381/6382  # 根据当前 redis 对外暴露的端口号填写 </span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span><span style="color:#6272a4"># 哨兵配置文件</span>
+</span></span><span style="display:flex;"><span>protected<span style="color:#ff79c6">-</span>mode no
+</span></span><span style="display:flex;"><span>port <span style="color:#bd93f9">26379</span>
+</span></span><span style="display:flex;"><span>daemonize no
+</span></span><span style="display:flex;"><span>pidfile <span style="color:#ff79c6">/</span><span style="color:#ff79c6">var</span><span style="color:#ff79c6">/</span>run<span style="color:#ff79c6">/</span>redis<span style="color:#ff79c6">-</span>sentinel<span style="color:#ff79c6">.</span>pid
+</span></span><span style="display:flex;"><span>logfile <span style="color:#f1fa8c">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>dir <span style="color:#ff79c6">/</span>tmp
+</span></span><span style="display:flex;"><span>sentinel down<span style="color:#ff79c6">-</span>after<span style="color:#ff79c6">-</span>milliseconds mymaster <span style="color:#bd93f9">30000</span>
+</span></span><span style="display:flex;"><span>acllog<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>len <span style="color:#bd93f9">128</span>
+</span></span><span style="display:flex;"><span>sentinel failover<span style="color:#ff79c6">-</span>timeout mymaster <span style="color:#bd93f9">180000</span>
+</span></span><span style="display:flex;"><span>sentinel deny<span style="color:#ff79c6">-</span>scripts<span style="color:#ff79c6">-</span>reconfig yes
+</span></span><span style="display:flex;"><span>SENTINEL resolve<span style="color:#ff79c6">-</span>hostnames no
+</span></span><span style="display:flex;"><span>SENTINEL announce<span style="color:#ff79c6">-</span>hostnames no
+</span></span><span style="display:flex;"><span>SENTINEL master<span style="color:#ff79c6">-</span>reboot<span style="color:#ff79c6">-</span>down<span style="color:#ff79c6">-</span>after<span style="color:#ff79c6">-</span>period mymaster <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 监视的主节点</span>
+</span></span><span style="display:flex;"><span>sentinel monitor mymaster <span style="color:#bd93f9">172.30</span><span style="color:#ff79c6">.</span><span style="color:#bd93f9">0.10</span> <span style="color:#bd93f9">6380</span> <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 己所在服务器ip</span>
+</span></span><span style="display:flex;"><span>sentinel announce<span style="color:#ff79c6">-</span>ip <span style="color:#bd93f9">172.30</span><span style="color:#ff79c6">.</span><span style="color:#bd93f9">0.10</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 自己暴露的端口</span>
+</span></span><span style="display:flex;"><span>sentinel announce<span style="color:#ff79c6">-</span>port <span style="color:#bd93f9">26379</span><span style="color:#ff79c6">/</span><span style="color:#bd93f9">26380</span><span style="color:#ff79c6">/</span><span style="color:#bd93f9">26381</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 主节点密码</span>
+</span></span><span style="display:flex;"><span>sentinel auth<span style="color:#ff79c6">-</span><span style="color:#ff79c6">pass</span> mymaster <span style="color:#bd93f9">6379</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 主节点启动
+</span></span><span style="display:flex;"><span>docker run \
+</span></span><span style="display:flex;"><span>--name redis-master \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/cluster/master/redis.conf:/etc/redis/redis.conf \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/cluster/master/data:/data \
+</span></span><span style="display:flex;"><span>-dp 6380:6379 \
+</span></span><span style="display:flex;"><span>redis:8.2.10 \
+</span></span><span style="display:flex;"><span>redis-server /etc/redis/redis.conf  #以指定配置文件运行
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 从节点1启动
+</span></span><span style="display:flex;"><span>docker run \
+</span></span><span style="display:flex;"><span>--name redis-slave1 \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/cluster/slave1/redis.conf:/etc/redis/redis.conf \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/cluster/slave1/data:/data \
+</span></span><span style="display:flex;"><span>-dp 6381:6379 \
+</span></span><span style="display:flex;"><span>redis:8.2.10 \
+</span></span><span style="display:flex;"><span>redis-server /etc/redis/redis.conf  --slaveof 172.30.0.10 6380 #以指定配置文件/主节点运行
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 从节点2启动
+</span></span><span style="display:flex;"><span>docker run \
+</span></span><span style="display:flex;"><span>--name redis-slave2 \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/cluster/slave2/redis.conf:/etc/redis/redis.conf \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/cluster/slave2/data:/data \
+</span></span><span style="display:flex;"><span>-dp 6382:6379 \
+</span></span><span style="display:flex;"><span>redis:8.2.10 \
+</span></span><span style="display:flex;"><span>redis-server /etc/redis/redis.conf --slaveof 172.30.0.10 6380 #以指定配置文件/主节点运行
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 哨兵1启动
+</span></span><span style="display:flex;"><span>docker run --name redis-sentinel1 \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/cluster/sentinel1/sentinel.conf:/etc/redis/sentinel.conf \
+</span></span><span style="display:flex;"><span>-dp 26379:26379 \
+</span></span><span style="display:flex;"><span>redis:8.2.10 \
+</span></span><span style="display:flex;"><span>redis-sentinel /etc/redis/sentinel.conf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 哨兵2启动
+</span></span><span style="display:flex;"><span>docker run --name redis-sentinel2 \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/cluster/sentinel2/sentinel.conf:/etc/redis/sentinel.conf \
+</span></span><span style="display:flex;"><span>-dp 26380:26379 \
+</span></span><span style="display:flex;"><span>redis:8.2.10 \
+</span></span><span style="display:flex;"><span>redis-sentinel /etc/redis/sentinel.conf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 哨兵3启动
+</span></span><span style="display:flex;"><span>docker run --name redis-sentinel3 \
+</span></span><span style="display:flex;"><span>-v /home/admin/docker/redis/cluster/sentinel3/sentinel.conf:/etc/redis/sentinel.conf \
+</span></span><span style="display:flex;"><span>-dp 26381:26379 \
+</span></span><span style="display:flex;"><span>redis:8.2.10 \
+</span></span><span style="display:flex;"><span>redis-sentinel /etc/redis/sentinel.conf</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看主从关系与哨兵</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>docker exec -it redis-master redis-cli -a 6379 info replication
+</span></span><span style="display:flex;"><span>docker exec -it redis-slave1 redis-cli -a 6379 info replication
+</span></span><span style="display:flex;"><span>docker exec -it redis-sentinel1 redis-cli -p 26379 info sentinel</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="../20261006000707.png" alt="" /></p>
+<p><img src="../20261006000742.png" alt="" /></p>
+<p><img src="../20261006004552.png" alt="" /></p>
+<p>查看主从同步效果</p>
+<p><img src="../20261006001037.png" alt="" /></p>
+<p>查看故障转移效果</p>
+<p><img src="../20261006004921.png" alt="" /></p>
+<p><img src="../20261006005016.png" alt="" /></p>
+<p><img src="../20261006004948.png" alt="" /></p>
+<p><img src="../20261006004857.png" alt="" /></p>
+<p><img src="../20261006005331.png" alt="" /></p>
+<h2 id="分布式插槽1主2从--n--哨兵集群">分布式插槽（1主2从 * n + 哨兵集群）<a class="anchor" href="#%e5%88%86%e5%b8%83%e5%bc%8f%e6%8f%92%e6%a7%bd1%e4%b8%bb2%e4%bb%8e--n--%e5%93%a8%e5%85%b5%e9%9b%86%e7%be%a4"></a></h2>
+<p>太懒，不怎么用的上，不做了</p>
+<h2 id="redis配置文件模板">redis配置文件模板<a class="anchor" href="#redis%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e6%a8%a1%e6%9d%bf"></a></h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 59
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 60
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 61
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 62
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 63
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 64
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 65
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 66
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 67
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 68
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 69
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 70
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 71
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 72
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 73
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 74
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 75
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 76
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 77
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 78
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 79
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 80
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 81
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 82
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 83
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 84
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 85
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 86
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 87
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 88
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 89
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 90
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 91
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 92
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 93
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 94
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 95
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 96
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 97
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 98
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 99
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">100
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">101
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">102
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">103
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">104
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">105
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">106
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">107
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">108
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">109
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">110
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">111
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">112
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">113
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">114
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">115
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">116
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">117
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">118
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">119
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">120
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">121
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">122
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">123
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">124
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">125
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">126
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">127
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">128
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">129
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">130
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">131
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">132
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">133
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">134
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">135
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">136
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">137
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">138
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">139
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">140
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">141
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">142
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">143
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">144
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">145
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">146
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">147
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">148
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">149
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">150
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">151
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">152
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">153
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">154
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">155
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">156
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">157
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">158
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">159
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">160
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">161
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">162
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">163
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">164
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">165
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">166
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">167
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">168
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">169
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">170
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">171
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">172
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">173
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">174
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">175
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">176
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">177
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">178
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">179
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">180
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">181
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">182
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">183
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">184
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">185
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">186
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">187
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">188
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">189
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">190
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">191
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">192
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">193
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">194
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">195
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">196
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>requirepass <span style="color:#bd93f9">6379</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># include /path/to/local.conf</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># include /path/to/other.conf</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># include /path/to/fragments/*.conf</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># loadmodule /path/to/my_module.so</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># loadmodule /path/to/other_module.so</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># bind 192.168.1.100 10.0.0.1     # listens on two specific IPv4 addresses</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># bind 127.0.0.1 ::1              # listens on loopback IPv4 and IPv6</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># bind * -::*                     # like the default, all available interfaces</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># bind 127.0.0.1 -::1</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># bind-source-addr 10.0.0.1</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># protected-mode yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># enable-protected-configs no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># enable-debug-command no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># enable-module-command no</span>
+</span></span><span style="display:flex;"><span>port <span style="color:#bd93f9">6379</span>
+</span></span><span style="display:flex;"><span>tcp<span style="color:#ff79c6">-</span>backlog <span style="color:#bd93f9">511</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># unixsocket /run/redis.sock</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># unixsocketperm 700</span>
+</span></span><span style="display:flex;"><span>timeout <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>tcp<span style="color:#ff79c6">-</span>keepalive <span style="color:#bd93f9">300</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># socket-mark-id 0</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># port 0</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-port 6379</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-cert-file redis.crt</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-key-file redis.key</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-key-file-pass secret</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-client-cert-file client.crt</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-client-key-file client.key</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-client-key-file-pass secret</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-dh-params-file redis.dh</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-ca-cert-file ca.crt</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-ca-cert-dir /etc/ssl/certs</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-auth-clients no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-auth-clients optional</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-replication yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-cluster yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-protocols &#34;TLSv1.2 TLSv1.3&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-ciphers DEFAULT:!MEDIUM</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-ciphersuites TLS_CHACHA20_POLY1305_SHA256</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-prefer-server-ciphers yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-session-caching no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-session-cache-size 5000</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tls-session-cache-timeout 60</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># daemonize no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># supervised auto</span>
+</span></span><span style="display:flex;"><span>pidfile <span style="color:#ff79c6">/</span><span style="color:#ff79c6">var</span><span style="color:#ff79c6">/</span>run<span style="color:#ff79c6">/</span>redis_6379<span style="color:#ff79c6">.</span>pid
+</span></span><span style="display:flex;"><span>loglevel notice
+</span></span><span style="display:flex;"><span>logfile <span style="color:#f1fa8c">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># syslog-enabled no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># syslog-ident redis</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># syslog-facility local0</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># crash-log-enabled no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># crash-memcheck-enabled no</span>
+</span></span><span style="display:flex;"><span>databases <span style="color:#bd93f9">16</span>
+</span></span><span style="display:flex;"><span>always<span style="color:#ff79c6">-</span>show<span style="color:#ff79c6">-</span>logo no
+</span></span><span style="display:flex;"><span>set<span style="color:#ff79c6">-</span>proc<span style="color:#ff79c6">-</span>title yes
+</span></span><span style="display:flex;"><span>proc<span style="color:#ff79c6">-</span>title<span style="color:#ff79c6">-</span>template <span style="color:#f1fa8c">&#34;{title} {listen-addr} {server-mode}&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># save &lt;seconds&gt; &lt;changes&gt; [&lt;seconds&gt; &lt;changes&gt; ...]</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># save &#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># save 3600 1 300 100 60 10000</span>
+</span></span><span style="display:flex;"><span>stop<span style="color:#ff79c6">-</span>writes<span style="color:#ff79c6">-</span>on<span style="color:#ff79c6">-</span>bgsave<span style="color:#ff79c6">-</span>error yes
+</span></span><span style="display:flex;"><span>rdbcompression yes
+</span></span><span style="display:flex;"><span>rdbchecksum yes
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># sanitize-dump-payload no</span>
+</span></span><span style="display:flex;"><span>dbfilename dump<span style="color:#ff79c6">.</span>rdb
+</span></span><span style="display:flex;"><span>rdb<span style="color:#ff79c6">-</span>del<span style="color:#ff79c6">-</span>sync<span style="color:#ff79c6">-</span>files no
+</span></span><span style="display:flex;"><span>dir <span style="color:#ff79c6">/</span>data
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># replicaof &lt;masterip&gt; &lt;masterport&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># masterauth &lt;master-password&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># masteruser &lt;username&gt;</span>
+</span></span><span style="display:flex;"><span>replica<span style="color:#ff79c6">-</span>serve<span style="color:#ff79c6">-</span>stale<span style="color:#ff79c6">-</span>data yes
+</span></span><span style="display:flex;"><span>replica<span style="color:#ff79c6">-</span>read<span style="color:#ff79c6">-</span>only yes
+</span></span><span style="display:flex;"><span>repl<span style="color:#ff79c6">-</span>diskless<span style="color:#ff79c6">-</span>sync yes
+</span></span><span style="display:flex;"><span>repl<span style="color:#ff79c6">-</span>diskless<span style="color:#ff79c6">-</span>sync<span style="color:#ff79c6">-</span>delay <span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span>repl<span style="color:#ff79c6">-</span>diskless<span style="color:#ff79c6">-</span>sync<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>replicas <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>repl<span style="color:#ff79c6">-</span>diskless<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">load</span> disabled
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># repl-ping-replica-period 10</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># repl-timeout 60</span>
+</span></span><span style="display:flex;"><span>repl<span style="color:#ff79c6">-</span>disable<span style="color:#ff79c6">-</span>tcp<span style="color:#ff79c6">-</span>nodelay no
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># repl-backlog-size 1mb</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># repl-backlog-ttl 3600</span>
+</span></span><span style="display:flex;"><span>replica<span style="color:#ff79c6">-</span>priority <span style="color:#bd93f9">100</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># propagation-error-behavior ignore</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># replica-ignore-disk-write-errors no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># replica-announced yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># min-replicas-to-write 3</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># min-replicas-max-lag 10</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># replica-announce-ip 5.5.5.5</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># replica-announce-port 1234</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># tracking-table-max-keys 1000000</span>
+</span></span><span style="display:flex;"><span>acllog<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>len <span style="color:#bd93f9">128</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># aclfile /etc/redis/users.acl</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># requirepass 111</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># acl-pubsub-default resetchannels</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># rename-command CONFIG &#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># rename-command flushall &#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># rename-command flushdb &#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># maxclients 10000</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># maxmemory &lt;bytes&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># maxmemory-policy noeviction</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># maxmemory-samples 5</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># maxmemory-eviction-tenacity 10</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># replica-ignore-maxmemory yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># active-expire-effort 1</span>
+</span></span><span style="display:flex;"><span>lazyfree<span style="color:#ff79c6">-</span>lazy<span style="color:#ff79c6">-</span>eviction no
+</span></span><span style="display:flex;"><span>lazyfree<span style="color:#ff79c6">-</span>lazy<span style="color:#ff79c6">-</span>expire no
+</span></span><span style="display:flex;"><span>lazyfree<span style="color:#ff79c6">-</span>lazy<span style="color:#ff79c6">-</span>server<span style="color:#ff79c6">-</span>del no
+</span></span><span style="display:flex;"><span>replica<span style="color:#ff79c6">-</span>lazy<span style="color:#ff79c6">-</span>flush no
+</span></span><span style="display:flex;"><span>lazyfree<span style="color:#ff79c6">-</span>lazy<span style="color:#ff79c6">-</span>user<span style="color:#ff79c6">-</span>del no
+</span></span><span style="display:flex;"><span>lazyfree<span style="color:#ff79c6">-</span>lazy<span style="color:#ff79c6">-</span>user<span style="color:#ff79c6">-</span>flush no
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># io-threads 4</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># io-threads-do-reads no</span>
+</span></span><span style="display:flex;"><span>oom<span style="color:#ff79c6">-</span>score<span style="color:#ff79c6">-</span>adj no
+</span></span><span style="display:flex;"><span>oom<span style="color:#ff79c6">-</span>score<span style="color:#ff79c6">-</span>adj<span style="color:#ff79c6">-</span>values <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">200</span> <span style="color:#bd93f9">800</span>
+</span></span><span style="display:flex;"><span>disable<span style="color:#ff79c6">-</span>thp yes
+</span></span><span style="display:flex;"><span>appendonly no
+</span></span><span style="display:flex;"><span>appendfilename <span style="color:#f1fa8c">&#34;appendonly.aof&#34;</span>
+</span></span><span style="display:flex;"><span>appenddirname <span style="color:#f1fa8c">&#34;appendonappendonappendonappendonappendonappendonappendonappendonappendonlydir&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># appendfsync always</span>
+</span></span><span style="display:flex;"><span>appendfsync everysec
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># appendfsync no</span>
+</span></span><span style="display:flex;"><span>no<span style="color:#ff79c6">-</span>appendfsync<span style="color:#ff79c6">-</span>on<span style="color:#ff79c6">-</span>rewrite no
+</span></span><span style="display:flex;"><span>auto<span style="color:#ff79c6">-</span>aof<span style="color:#ff79c6">-</span>rewrite<span style="color:#ff79c6">-</span>percentage <span style="color:#bd93f9">100</span>
+</span></span><span style="display:flex;"><span>auto<span style="color:#ff79c6">-</span>aof<span style="color:#ff79c6">-</span>rewrite<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">min</span><span style="color:#ff79c6">-</span>size <span style="color:#bd93f9">64</span>mb
+</span></span><span style="display:flex;"><span>aof<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">load</span><span style="color:#ff79c6">-</span>truncated yes
+</span></span><span style="display:flex;"><span>aof<span style="color:#ff79c6">-</span>use<span style="color:#ff79c6">-</span>rdb<span style="color:#ff79c6">-</span>preamble yes
+</span></span><span style="display:flex;"><span>aof<span style="color:#ff79c6">-</span>timestamp<span style="color:#ff79c6">-</span>enabled no
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># shutdown-timeout 10</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># shutdown-on-sigint default</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># shutdown-on-sigterm default</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># lua-time-limit 5000</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># busy-reply-threshold 5000</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-enabled yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-config-file nodes-6379.conf</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-node-timeout 15000</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-port 0</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-replica-validity-factor 10</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-migration-barrier 1</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-allow-replica-migration yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-require-full-coverage yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-replica-no-failover no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-allow-reads-when-down no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-allow-pubsubshard-when-down yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-link-sendbuf-limit 0</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-announce-hostname &#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-preferred-endpoint-type ip</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-announce-ip 10.1.1.5</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-announce-tls-port 6379</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-announce-port 0</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cluster-announce-bus-port 6380</span>
+</span></span><span style="display:flex;"><span>slowlog<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">log</span><span style="color:#ff79c6">-</span>slower<span style="color:#ff79c6">-</span>than <span style="color:#bd93f9">10000</span>
+</span></span><span style="display:flex;"><span>slowlog<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>len <span style="color:#bd93f9">128</span>
+</span></span><span style="display:flex;"><span>latency<span style="color:#ff79c6">-</span>monitor<span style="color:#ff79c6">-</span>threshold <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># latency-tracking yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># latency-tracking-info-percentiles 50 99 99.9</span>
+</span></span><span style="display:flex;"><span>notify<span style="color:#ff79c6">-</span>keyspace<span style="color:#ff79c6">-</span>events <span style="color:#f1fa8c">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">hash</span><span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>listpack<span style="color:#ff79c6">-</span>entries <span style="color:#bd93f9">512</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">hash</span><span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>listpack<span style="color:#ff79c6">-</span>value <span style="color:#bd93f9">64</span>
+</span></span><span style="display:flex;"><span>list<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>listpack<span style="color:#ff79c6">-</span>size <span style="color:#ff79c6">-</span><span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span>list<span style="color:#ff79c6">-</span>compress<span style="color:#ff79c6">-</span>depth <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>set<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>intset<span style="color:#ff79c6">-</span>entries <span style="color:#bd93f9">512</span>
+</span></span><span style="display:flex;"><span>zset<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>listpack<span style="color:#ff79c6">-</span>entries <span style="color:#bd93f9">128</span>
+</span></span><span style="display:flex;"><span>zset<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>listpack<span style="color:#ff79c6">-</span>value <span style="color:#bd93f9">64</span>
+</span></span><span style="display:flex;"><span>hll<span style="color:#ff79c6">-</span>sparse<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>bytes <span style="color:#bd93f9">3000</span>
+</span></span><span style="display:flex;"><span>stream<span style="color:#ff79c6">-</span>node<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>bytes <span style="color:#bd93f9">4096</span>
+</span></span><span style="display:flex;"><span>stream<span style="color:#ff79c6">-</span>node<span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">max</span><span style="color:#ff79c6">-</span>entries <span style="color:#bd93f9">100</span>
+</span></span><span style="display:flex;"><span>activerehashing yes
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># client-output-buffer-limit &lt;class&gt; &lt;hard limit&gt; &lt;soft limit&gt; &lt;soft seconds&gt;</span>
+</span></span><span style="display:flex;"><span>client<span style="color:#ff79c6">-</span>output<span style="color:#ff79c6">-</span>buffer<span style="color:#ff79c6">-</span>limit normal <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>client<span style="color:#ff79c6">-</span>output<span style="color:#ff79c6">-</span>buffer<span style="color:#ff79c6">-</span>limit replica <span style="color:#bd93f9">256</span>mb <span style="color:#bd93f9">64</span>mb <span style="color:#bd93f9">60</span>
+</span></span><span style="display:flex;"><span>client<span style="color:#ff79c6">-</span>output<span style="color:#ff79c6">-</span>buffer<span style="color:#ff79c6">-</span>limit pubsub <span style="color:#bd93f9">32</span>mb <span style="color:#bd93f9">8</span>mb <span style="color:#bd93f9">60</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># client-query-buffer-limit 1gb</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># maxmemory-clients 1g</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># maxmemory-clients 5%</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># proto-max-bulk-len 512mb</span>
+</span></span><span style="display:flex;"><span>hz <span style="color:#bd93f9">10</span>
+</span></span><span style="display:flex;"><span>dynamic<span style="color:#ff79c6">-</span>hz yes
+</span></span><span style="display:flex;"><span>aof<span style="color:#ff79c6">-</span>rewrite<span style="color:#ff79c6">-</span>incremental<span style="color:#ff79c6">-</span>fsync yes
+</span></span><span style="display:flex;"><span>rdb<span style="color:#ff79c6">-</span>save<span style="color:#ff79c6">-</span>incremental<span style="color:#ff79c6">-</span>fsync yes
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># lfu-log-factor 10</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># lfu-decay-time 1</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># activedefrag no</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># active-defrag-ignore-bytes 100mb</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># active-defrag-threshold-lower 10</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># active-defrag-threshold-upper 100</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># active-defrag-cycle-min 1</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># active-defrag-cycle-max 25</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># active-defrag-max-scan-fields 1000</span>
+</span></span><span style="display:flex;"><span>jemalloc<span style="color:#ff79c6">-</span>bg<span style="color:#ff79c6">-</span>thread yes
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># server_cpulist 0-7:2</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># bio_cpulist 1,3</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># aof_rewrite_cpulist 8-11</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># bgsave_cpulist 1,10-11</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># ignore-warnings ARM64-COW-BUG</span></span></span></code></pre></td></tr></table>
+</div>
+</div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+  <a class="flex align-center" href="https://54deer.github.io/edit/main/content/content/docs/Docker/docker7.md" target="_blank" rel="noopener edit">
+    <img src="/icons/edit.svg" class="book-icon" alt="Edit" />
+    <span>编辑本页</span>
+  </a>
+
+</div>
+
+</div>
+
+<div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/Docker/docker6/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Docker 网络架构</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/git/Git/" class="flex align-center">
+        <span>Git</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay" aria-hidden="true"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#mysql">MySQL</a>
+      <ul>
+        <li><a href="#问题0版本选择">问题0：版本选择</a></li>
+        <li><a href="#问题1配置设置">问题1：配置设置</a></li>
+        <li><a href="#问题2持久化数据问题">问题2：持久化数据问题</a></li>
+        <li><a href="#单机版部署">单机版部署</a></li>
+        <li><a href="#主从版部署">主从版部署</a>
+          <ul>
+            <li><a href="#主节点">主节点</a></li>
+            <li><a href="#从节点">从节点</a></li>
+            <li><a href="#主从效果展示">主从效果展示</a></li>
+          </ul>
+        </li>
+        <li><a href="#现象踩坑总结">现象/踩坑总结</a></li>
+      </ul>
+    </li>
+    <li><a href="#redis">redis</a>
+      <ul>
+        <li><a href="#单机版部署-1">单机版部署</a></li>
+        <li><a href="#一主二从三哨兵部署">一主二从三哨兵部署</a></li>
+        <li><a href="#分布式插槽1主2从--n--哨兵集群">分布式插槽（1主2从 * n + 哨兵集群）</a></li>
+        <li><a href="#redis配置文件模板">redis配置文件模板</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
