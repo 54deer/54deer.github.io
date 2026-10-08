@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr" data-theme="auto">
+<head>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="overlay 网络 Docker Swarm 集群使用 overlay 网络模型实现跨节点通信
+是重叠网络或覆盖网络，一种构建于 underlay 下层网络之上的逻辑虚拟网络。在宿主机的物理网络之上又创建出新的网络
+">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://54deer.github.io/docs/Docker/docker10/">
+	<meta property="og:site_name" content="54deer の BLOG">
+	<meta property="og:title" content="Docker  swarm与overlay网络">
+	<meta property="og:description" content="overlay 网络 Docker Swarm 集群使用 overlay 网络模型实现跨节点通信
+是重叠网络或覆盖网络，一种构建于 underlay 下层网络之上的逻辑虚拟网络。在宿主机的物理网络之上又创建出新的网络">
+	<meta property="og:locale" content="zh">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="docs">
+		<meta property="article:published_time" content="2026-10-08T00:00:00+08:00">
+		<meta property="article:modified_time" content="2026-10-08T15:09:13+08:00">
+
+
+	<meta itemprop="name" content="Docker  swarm与overlay网络">
+	<meta itemprop="description" content="overlay 网络 Docker Swarm 集群使用 overlay 网络模型实现跨节点通信
+是重叠网络或覆盖网络，一种构建于 underlay 下层网络之上的逻辑虚拟网络。在宿主机的物理网络之上又创建出新的网络">
+	<meta itemprop="datePublished" content="2026-10-08T00:00:00+08:00">
+	<meta itemprop="dateModified" content="2026-10-08T15:09:13+08:00">
+	<meta itemprop="wordCount" content="1460">
+
+<title>Docker  swarm与overlay网络 • 54deer の BLOG</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="https://54deer.github.io/docs/Docker/docker10/">
+<link rel="stylesheet" href="/book.min.a02ac497c6d6e5c0a81db7ed78d24326ef87e617cb865bebfbe4d1a1d6ee6573.css" integrity="sha256-oCrEl8bW5cCoHbfteNJDJu&#43;H5hfLhlvr&#43;&#43;TRodbuZXM=" crossorigin="anonymous">
+
+
+<script type="module" src="/zh.search.min.2b8a986b425ad59443beaf0f1cc2fcd455a963b2da9bc1c68c08562b91d90354.js" integrity="sha256-K4qYa0Ja1ZRDvq8PHML81FWpY7Lam8HGjAhWK5HZA1Q=" crossorigin="anonymous"></script>
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>54deer の BLOG</span>
+  </a>
+</h2>
+
+<div class="book-search hidden">
+  <input id="book-search-input" type="text"
+    placeholder="搜索"
+    aria-label="搜索"
+    maxlength="64" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+
+<ul><li><a href="/">🏠 About Me</a></li><li><a href="https://github.com/54deer" target="_blank" rel="noopener">🔗 GitHub</a></li></ul>
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-9e24d28b120804ba6357f6fbea8c5d7d" class="toggle"  />
+    <label for="section-9e24d28b120804ba6357f6fbea8c5d7d" class="flex">
+      <a role="button" class="">
+        Golang</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-81b3b35a677bb5efb846d979849ae55f" class="toggle"  />
+    <label for="section-81b3b35a677bb5efb846d979849ae55f" class="flex">
+      <a role="button" class="">
+        GO 标准库</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-7932a59f0acc34d9eb509b606d8c3e7f" class="toggle"  />
+    <label for="section-7932a59f0acc34d9eb509b606d8c3e7f" class="flex">
+      <a role="button" class="">
+        GO 三方库</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-af6c0eda4d2cdd556cc66540bdce0b76" class="toggle"  />
+    <label for="section-af6c0eda4d2cdd556cc66540bdce0b76" class="flex">
+      <a role="button" class="">
+        pgSQL&amp;MySQL</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-fa7c9692409e20f1f52ebe77c4c5e801" class="toggle"  />
+    <label for="section-fa7c9692409e20f1f52ebe77c4c5e801" class="flex">
+      <a role="button" class="">
+        SQL&amp;GORM</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-a7abf702dde8fdc025b82feea1d6ba03" class="toggle"  />
+    <label for="section-a7abf702dde8fdc025b82feea1d6ba03" class="flex">
+      <a role="button" class="">
+        Redis</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-2b000412833c87b0e53129bd1d6feab9" class="toggle"  />
+    <label for="section-2b000412833c87b0e53129bd1d6feab9" class="flex">
+      <a role="button" class="">
+        RabbitMQ</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="toggle"  />
+    <label for="section-d6b0fcf41dd713d9e8e5b664c09bbe0b" class="flex">
+      <a role="button" class="">
+        mongoDB</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/mongoDB/1/" class="">
+      mongoDB 基础知识</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/mongoDB/2/" class="">
+      mongosh CURD操作</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-4a86b6f03b2baaea23efad445fdd13a5" class="toggle" checked />
+    <label for="section-4a86b6f03b2baaea23efad445fdd13a5" class="flex">
+      <a role="button" class="">
+        docker</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker1/" class="">
+      Docker 概述</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker2/" class="">
+      Docker 镜像</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker3/" class="">
+      Docker 容器</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker4/" class="">
+      Dockerfile</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker5/" class="">
+      Docker 数据持久化</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker6/" class="">
+      Docker 网络架构</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker7/" class="">
+      Docker compose</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker8/" class="">
+      Docker  常用服务器安装</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/Docker9/" class="">
+      Docker 管理与监控</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/Docker/docker10/" class="active">
+      Docker  swarm与overlay网络</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-ed5bdd985a7ce57aea7f541f44e05eca" class="toggle"  />
+    <label for="section-ed5bdd985a7ce57aea7f541f44e05eca" class="flex">
+      <a role="button" class="">
+        Git</a>
+      <img src="/icons/chevron-right.svg" class="book-icon" alt="Expand" />
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/git/Git/" class="">
+      Git</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <input type="checkbox" class="toggle" id="menu-control" />
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Docker  swarm与overlay网络</h3>
+
+  
+  <input type="checkbox" class="toggle" id="toc-control" />
+  <label for="toc-control">
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+  </label>
+  
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overlay-网络">overlay 网络</a></li>
+    <li><a href="#docker-swarm">Docker swarm</a>
+      <ul>
+        <li><a href="#swarm-架构">swarm 架构</a></li>
+        <li><a href="#服务">服务</a></li>
+        <li><a href="#服务部署模式">服务部署模式</a></li>
+        <li><a href="#swarm-相关命令">swarm 相关命令</a></li>
+        <li><a href="#自动锁定">自动锁定</a></li>
+        <li><a href="#pki-公钥基础设施">PKI 公钥基础设施</a></li>
+        <li><a href="#service--node相关命令">service / node相关命令</a></li>
+        <li><a href="#滚动更新">滚动更新</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      <h1>Docker  swarm与overlay网络</h1>
+
+
+<div class="page-meta" style="opacity: 0.65; font-size: 0.85em; margin: -0.5em 0 1.5em 0;">
+  作者 54deer
+   · 
+  日期 2026-10-08
+</div>
+
+      
+  <article class="markdown book-article"><h1 id="overlay-网络">overlay 网络<a class="anchor" href="#overlay-%e7%bd%91%e7%bb%9c"></a></h1>
+<p>Docker Swarm 集群使用 overlay 网络模型实现跨节点通信</p>
+<p>是重叠网络或覆盖网络，一种构建于 underlay 下层网络之上的<strong>逻辑虚拟网络</strong>。在宿主机的物理网络之上又创建出新的网络</p>
+<p><img src="../20261008102512.png" alt="" /></p>
+<p>Docker Swarm 集群的 overlay 网络模型在创建时，会创建出两个网络：<strong>docker_gwbidge</strong>
+<strong>网络与 ingress网络</strong></p>
+<p><img src="../20261008104331.png" alt="" /></p>
+<p>同时还创建出了 <strong>docker_gwbidge 网关与 br0 网关，及 ingress-sbox容器</strong>(ingress-sbox 容器是由 overlay 网络虚拟出的，并不是真实存在的进程，通过 docker ps 命令是查看不到)</p>
+<p>一次请求的流程：<br>
+宿主机网卡  -&gt; NAT (跨网络) -&gt;  docker_gwbrige 网桥  -&gt; ingress-sbox 容器(跨网络)  -&gt; br0 网桥  -&gt;  同主机转发到容器 / 不同主机转发到vxlan隧道转发到另一台主机</p>
+<p>宿主机NAT表</p>
+<p><img src="../20261008104756.png" alt="" /></p>
+<p>ingress-sbox 容器内路由表</p>
+<p><img src="../20261008105116.png" alt="" /></p>
+<h1 id="docker-swarm">Docker swarm<a class="anchor" href="#docker-swarm"></a></h1>
+<h2 id="swarm-架构">swarm 架构<a class="anchor" href="#swarm-%e6%9e%b6%e6%9e%84"></a></h2>
+<p>manager子集群：</p>
+<ol>
+<li>运行分配的任务/服务; 维护 swarm 集群状态、调试 servcie、处理 swarm 集群管理任务。这些 manager 间通过Raft 算法维护着一致性，manager节点间可以相互通信及与worker通信</li>
+</ol>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 管理命令
+</span></span><span style="display:flex;"><span>docker swarm   &lt;SUB_COMMAND&gt;
+</span></span><span style="display:flex;"><span>docker node    &lt;SUB_COMMAND&gt;
+</span></span><span style="display:flex;"><span>docker service &lt;SUB_COMMAND&gt;</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>采用热备容灾，只有一个manager处于leader状态，其余处于热备状态等待leader下线采用raft算法再选举</li>
+<li>当某个 task 所在的主机或容器出现了问题时，manager 的编排器会自动再创建出新的task，然后分发器会再选择出一台 available node 可用节点，并将该节点分配给新的 task。</li>
+</ol>
+<p>worker节点：运行分配的任务/服务 ，worker间不能相互通信</p>
+<p><img src="../20261008105441.png" alt="" /></p>
+<p>物理上：swarm由多台宿主机构成</p>
+<p>逻辑上：swarm由node/节点构成（分manage/worker），节点与宿主机不一定是一对一关系</p>
+<h2 id="服务">服务<a class="anchor" href="#%e6%9c%8d%e5%8a%a1"></a></h2>
+<p>swarm集群运行服务（一个服务可以分为多个任务由manager分发器交给不同节点的容器运行），易部署，提供负载均衡，容灾……</p>
+<p><img src="../20261008110534.png" alt="" /></p>
+<p><img src="../20261008111242.png" alt="" /></p>
+<h2 id="服务部署模式">服务部署模式<a class="anchor" href="#%e6%9c%8d%e5%8a%a1%e9%83%a8%e7%bd%b2%e6%a8%a1%e5%bc%8f"></a></h2>
+<p>分两种方式：</p>
+<ol>
+<li>replicated:  可以指定该服务要运行多少个相同的任务，均匀分发给各节点</li>
+<li>global:  每个节点都运行一个该服务的相同的任务</li>
+</ol>
+<p><img src="../20261008112237.png" alt="" /></p>
+<h2 id="swarm-相关命令">swarm 相关命令<a class="anchor" href="#swarm-%e7%9b%b8%e5%85%b3%e5%91%bd%e4%bb%a4"></a></h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 查看节点docker swarm是否开启
+</span></span><span style="display:flex;"><span>docker info</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="../20261008114000.png" alt="" /></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 初始化swarm集群并成为一个manager
+</span></span><span style="display:flex;"><span>docker swarm init
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 获取让其他节点作为manager/worker加入swarm的join-token
+</span></span><span style="display:flex;"><span>docker swarm join-token manager/worker
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 其他节点加入swarm的命令，每进入一次算一个节点
+</span></span><span style="display:flex;"><span>docker swarm join --token &lt;TOKEN&gt;  HOST:PORT
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 查看swarm 节点，只能在manager上执行
+</span></span><span style="display:flex;"><span>docker node ls</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="../20261008113735.png" alt="" /></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 角色转换
+</span></span><span style="display:flex;"><span>docker node promote &lt;NODE&gt;  // worker -&gt; manager
+</span></span><span style="display:flex;"><span>docker node demote &lt;NODE&gt;   // manager -&gt; worker
+</span></span><span style="display:flex;"><span>docker node update  --role manager/worker &lt;NODE&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 关闭swarm模式, manager节点需先降为worker才能退出
+</span></span><span style="display:flex;"><span>docker swarm leave 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 在manager上删除/退群 down/退出swarm的节点
+</span></span><span style="display:flex;"><span>docker swarm rm
+</span></span><span style="display:flex;"><span>-f 强制删除</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="自动锁定">自动锁定<a class="anchor" href="#%e8%87%aa%e5%8a%a8%e9%94%81%e5%ae%9a"></a></h2>
+<p>集群自动锁定功能为 manager 间的通信启用了 TLS 加密。用于加密和解密的公钥与私钥，全部都维护在各个节点的 Docker 内存中。一旦节点的 Docker 重启，则密钥丢失</p>
+<p>再次启动后进入锁定状态，需要使用密钥解锁，否则不能进入swarm</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 开启集群自动锁定功能(注意要保存命令产生的解锁密钥)
+</span></span><span style="display:flex;"><span>docker swarm update -autolock=ture
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// manager上查看生产的密钥
+</span></span><span style="display:flex;"><span>docker swarm unlock-key
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 解锁密令
+</span></span><span style="display:flex;"><span>docker swarm unlock</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="pki-公钥基础设施">PKI 公钥基础设施<a class="anchor" href="#pki-%e5%85%ac%e9%92%a5%e5%9f%ba%e7%a1%80%e8%ae%be%e6%96%bd"></a></h2>
+<p><img src="../20261008142430.png" alt="" /></p>
+<p><img src="../20261008142401.png" alt="" /></p>
+<p><img src="../20261008142450.png" alt="" /></p>
+<h2 id="service--node相关命令">service / node相关命令<a class="anchor" href="#service--node%e7%9b%b8%e5%85%b3%e5%91%bd%e4%bb%a4"></a></h2>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 创建服务
+</span></span><span style="display:flex;"><span>docker service create &lt;IMAGE&gt;
+</span></span><span style="display:flex;"><span>--replica n 制定该服务创建的任务
+</span></span><span style="display:flex;"><span>--global
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 查看运行中的服务
+</span></span><span style="display:flex;"><span>docker service ls
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 查看服务详细
+</span></span><span style="display:flex;"><span>docker service inspect &lt;SERVICE&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 查看服务任务task分配的节点信息
+</span></span><span style="display:flex;"><span>docker service ps &lt;SERVICE&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 查看节点上运行的任务task信息
+</span></span><span style="display:flex;"><span>docker node ps &lt;NODE&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 查看服务/任务日志
+</span></span><span style="display:flex;"><span>docker service logs &lt;SERVICE&gt; / &lt;TASK ID&gt;</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>// 服务扩缩容（增减task数）
+</span></span><span style="display:flex;"><span>docker service update --replicas &lt;NUM&gt; &lt;SERVICE&gt;
+</span></span><span style="display:flex;"><span>docker service scale &lt;SERVICE&gt; = &lt;NUM&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// 暂停/清空节点的 task 分配
+</span></span><span style="display:flex;"><span>docker node update --availability pause/drain &lt;NODE&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>--availability string   Availability of the node (&#34;active&#34;, &#34;pause&#34;, &#34;drain&#34;)</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="滚动更新">滚动更新<a class="anchor" href="#%e6%bb%9a%e5%8a%a8%e6%9b%b4%e6%96%b0"></a></h2>
+<p><img src="../20261008150104.png" alt="" /></p>
+<p>更新的过程就是前面在创建服务时指定的那样，每次更新 2 个 task，更新间隔为 3 秒</p>
+<p><img src="../20261008150122.png" alt="" /></p>
+<p>回滚</p>
+<p><img src="../20261008150225.png" alt="" /></p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+  <a class="flex align-center" href="https://54deer.github.io/edit/main/content/content/docs/Docker/docker10.md" target="_blank" rel="noopener edit">
+    <img src="/icons/edit.svg" class="book-icon" alt="Edit" />
+    <span>编辑本页</span>
+  </a>
+
+</div>
+
+</div>
+
+<div class="flex flex-wrap justify-between">
+    <span>
+    
+      <a href="/docs/Docker/Docker9/" class="flex align-center">
+        <img src="/icons/backward.svg" class="book-icon" alt="Backward" />
+        <span>Docker 管理与监控</span>
+      </a>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/git/Git/" class="flex align-center">
+        <span>Git</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay" aria-hidden="true"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overlay-网络">overlay 网络</a></li>
+    <li><a href="#docker-swarm">Docker swarm</a>
+      <ul>
+        <li><a href="#swarm-架构">swarm 架构</a></li>
+        <li><a href="#服务">服务</a></li>
+        <li><a href="#服务部署模式">服务部署模式</a></li>
+        <li><a href="#swarm-相关命令">swarm 相关命令</a></li>
+        <li><a href="#自动锁定">自动锁定</a></li>
+        <li><a href="#pki-公钥基础设施">PKI 公钥基础设施</a></li>
+        <li><a href="#service--node相关命令">service / node相关命令</a></li>
+        <li><a href="#滚动更新">滚动更新</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
